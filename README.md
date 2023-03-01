@@ -51,3 +51,12 @@ Report bugs using the [Issues](https://github.com/x07x08/TF2-Dodgeball-Modified/
 3. Dodgeball Redux by ClassicGuzzi : [AlliedMods Link](https://forums.alliedmods.net/showthread.php?p=2226728) | [GitHub Link](https://github.com/ClassicSpeed/dodgeball)
 4. BloodyNightmare and Mitchell for the original airblast prevention plugin : [AlliedMods Link](https://forums.alliedmods.net/showthread.php?t=233475)
 5. Syntax converter batch by Dragokas : [AlliedMods Link](https://forums.alliedmods.net/showpost.php?p=2593268&postcount=54)
+
+# Issues zones
+- When we start the gamemode, it seems like our spawner classes aren't set to 0 instead they are at default -1 and doesn't spawn a rocket. Even if the timer has been set. Needs to be looked into.
+```txt
+L 02/27/2023 - 19:49:47: [SM] Exception reported: Array index out-of-bounds (index -1, limit 50)
+L 02/27/2023 - 19:49:47: [SM] Blaming: TF2Dodgeball.smx
+L 02/27/2023 - 19:49:47: [SM] Call stack trace:
+L 02/27/2023 - 19:49:47: [SM]   [1] Line 1013, e:\Programming\SourcePawn\TF2-Dodgeball-Modified-Zones\TF2Dodgeball\addons\sourcemod\scripting\TF2Dodgeball.sp::OnDodgeBallGameFrame
+```
