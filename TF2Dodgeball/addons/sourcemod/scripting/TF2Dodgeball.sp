@@ -1,7 +1,7 @@
 // *********************************************************************************
 // PREPROCESSOR
 // *********************************************************************************
-#pragma semicolon 1  // Force strict semicolon mode.
+#pragma semicolon 1	 // Force strict semicolon mode.
 #pragma newdecls required
 
 // *********************************************************************************
@@ -19,12 +19,12 @@
 // CONSTANTS
 // *********************************************************************************
 // ---- Plugin-related constants ---------------------------------------------------
-#define PLUGIN_NAME    "[TF2] Dodgeball"
-#define PLUGIN_AUTHOR  "Damizean, edited by x07x08"
+#define PLUGIN_NAME		 "[TF2] Dodgeball"
+#define PLUGIN_AUTHOR	 "Damizean, edited by x07x08"
 #define PLUGIN_VERSION "1.9.3"
 #define PLUGIN_CONTACT "https://github.com/x07x08/TF2-Dodgeball-Modified"
 
-#define ZONE_NAME "DodgeballZone"
+#define ZONE_NAME			 "DodgeballZone"
 
 // ---- Flags and types constants --------------------------------------------------
 enum Musics
@@ -41,143 +41,143 @@ enum Musics
 // *********************************************************************************
 
 // -----<<< Cvars >>>-----
-ConVar g_hCvarEnabled;
-ConVar g_hCvarEnableCfgFile;
-ConVar g_hCvarDisableCfgFile;
-ConVar g_hCvarStealPreventionNumber;
-ConVar g_hCvarStealPreventionDamage;
-ConVar g_hCvarStealDistance;
-ConVar g_hCvarDelayPrevention;
-ConVar g_hCvarDelayPreventionTime;
-ConVar g_hCvarDelayPreventionSpeedup;
-ConVar g_hCvarNoTargetRedirectDamage;
+ConVar				 g_hCvarEnabled;
+ConVar				 g_hCvarEnableCfgFile;
+ConVar				 g_hCvarDisableCfgFile;
+ConVar				 g_hCvarStealPreventionNumber;
+ConVar				 g_hCvarStealPreventionDamage;
+ConVar				 g_hCvarStealDistance;
+ConVar				 g_hCvarDelayPrevention;
+ConVar				 g_hCvarDelayPreventionTime;
+ConVar				 g_hCvarDelayPreventionSpeedup;
+ConVar				 g_hCvarNoTargetRedirectDamage;
 
 // -----<<< Gameplay >>>-----
-bool   g_bEnabled;         // Is the plugin enabled?
-bool   g_bRoundStarted;    // Has the round started?
-int    g_iRoundCount;      // Current round count since map start
-int    g_iRocketsFired;    // No. of rockets fired since round start
-Handle g_hLogicTimer;      // Logic timer
-float  g_fNextSpawnTime;   // Time at which the next rocket will be able to spawn
-int    g_iLastDeadTeam;    // The team of the last dead client. If none, it's a random team.
-int    g_iLastDeadClient;  // The last dead client. If none, it's a random client.
-int    g_iPlayerCount;
-float  g_fTickModifier;
-int    g_iLastStealer;
+bool					 g_bEnabled;				 // Is the plugin enabled?
+bool					 g_bRoundStarted;		 // Has the round started?
+int						 g_iRoundCount;			 // Current round count since map start
+int						 g_iRocketsFired;		 // No. of rockets fired since round start
+Handle				 g_hLogicTimer;			 // Logic timer
+float					 g_fNextSpawnTime;	 // Time at which the next rocket will be able to spawn
+int						 g_iLastDeadTeam;		 // The team of the last dead client. If none, it's a random team.
+int						 g_iLastDeadClient;	 // The last dead client. If none, it's a random client.
+int						 g_iPlayerCount;
+float					 g_fTickModifier;
+int						 g_iLastStealer;
 
-eRocketSteal bStealArray[MAXPLAYERS + 1];
+eRocketSteal	 bStealArray[MAXPLAYERS + 1];
 
 // -----<<< Configuration >>>-----
-bool g_bMusicEnabled;
-bool g_bMusic[view_as<int>(SizeOfMusicsArray)];
-char g_strMusic[view_as<int>(SizeOfMusicsArray)][PLATFORM_MAX_PATH];
-bool g_bUseWebPlayer;
-char g_strWebPlayerUrl[256];
+bool					 g_bMusicEnabled;
+bool					 g_bMusic[view_as<int>(SizeOfMusicsArray)];
+char					 g_strMusic[view_as<int>(SizeOfMusicsArray)][PLATFORM_MAX_PATH];
+bool					 g_bUseWebPlayer;
+char					 g_strWebPlayerUrl[256];
 
 // -----<<< Structures >>>-----
 // Rockets
-bool        g_bRocketIsValid[MAX_ROCKETS];
-int         g_iRocketEntity[MAX_ROCKETS];
-int         g_iRocketTarget[MAX_ROCKETS];
-int         g_iRocketClass[MAX_ROCKETS];
-RocketFlags g_iRocketFlags[MAX_ROCKETS];
-RocketState g_iRocketState[MAX_ROCKETS];
-float       g_fRocketSpeed[MAX_ROCKETS];
-float       g_fRocketMphSpeed[MAX_ROCKETS];
-float       g_fRocketDirection[MAX_ROCKETS][3];
-int         g_iRocketDeflections[MAX_ROCKETS];
-int         g_iRocketEventDeflections[MAX_ROCKETS];
-float       g_fRocketLastDeflectionTime[MAX_ROCKETS];
-float       g_fRocketLastBeepTime[MAX_ROCKETS];
-float       g_fLastSpawnTime[MAX_ROCKETS];
-int         g_iRocketBounces[MAX_ROCKETS];
-int         g_iRocketCount;
+bool					 g_bRocketIsValid[MAX_ROCKETS];
+int						 g_iRocketEntity[MAX_ROCKETS];
+int						 g_iRocketTarget[MAX_ROCKETS];
+int						 g_iRocketClass[MAX_ROCKETS];
+RocketFlags		 g_iRocketFlags[MAX_ROCKETS];
+RocketState		 g_iRocketState[MAX_ROCKETS];
+float					 g_fRocketSpeed[MAX_ROCKETS];
+float					 g_fRocketMphSpeed[MAX_ROCKETS];
+float					 g_fRocketDirection[MAX_ROCKETS][3];
+int						 g_iRocketDeflections[MAX_ROCKETS];
+int						 g_iRocketEventDeflections[MAX_ROCKETS];
+float					 g_fRocketLastDeflectionTime[MAX_ROCKETS];
+float					 g_fRocketLastBeepTime[MAX_ROCKETS];
+float					 g_fLastSpawnTime[MAX_ROCKETS];
+int						 g_iRocketBounces[MAX_ROCKETS];
+int						 g_iRocketCount;
 
 // Classes
-char           g_strRocketClassName[MAX_ROCKET_CLASSES][16];
-char           g_strRocketClassLongName[MAX_ROCKET_CLASSES][32];
+char					 g_strRocketClassName[MAX_ROCKET_CLASSES][16];
+char					 g_strRocketClassLongName[MAX_ROCKET_CLASSES][32];
 BehaviourTypes g_iRocketClassBehaviour[MAX_ROCKET_CLASSES];
-char           g_strRocketClassModel[MAX_ROCKET_CLASSES][PLATFORM_MAX_PATH];
-RocketFlags    g_iRocketClassFlags[MAX_ROCKET_CLASSES];
-float          g_fRocketClassBeepInterval[MAX_ROCKET_CLASSES];
-char           g_strRocketClassSpawnSound[MAX_ROCKET_CLASSES][PLATFORM_MAX_PATH];
-char           g_strRocketClassBeepSound[MAX_ROCKET_CLASSES][PLATFORM_MAX_PATH];
-char           g_strRocketClassAlertSound[MAX_ROCKET_CLASSES][PLATFORM_MAX_PATH];
-float          g_fRocketClassCritChance[MAX_ROCKET_CLASSES];
-float          g_fRocketClassDamage[MAX_ROCKET_CLASSES];
-float          g_fRocketClassDamageIncrement[MAX_ROCKET_CLASSES];
-float          g_fRocketClassSpeed[MAX_ROCKET_CLASSES];
-float          g_fRocketClassSpeedIncrement[MAX_ROCKET_CLASSES];
-float          g_fRocketClassSpeedLimit[MAX_ROCKET_CLASSES];
-float          g_fRocketClassTurnRate[MAX_ROCKET_CLASSES];
-float          g_fRocketClassTurnRateIncrement[MAX_ROCKET_CLASSES];
-float          g_fRocketClassTurnRateLimit[MAX_ROCKET_CLASSES];
-float          g_fRocketClassElevationRate[MAX_ROCKET_CLASSES];
-float          g_fRocketClassElevationLimit[MAX_ROCKET_CLASSES];
-float          g_fRocketClassRocketsModifier[MAX_ROCKET_CLASSES];
-float          g_fRocketClassPlayerModifier[MAX_ROCKET_CLASSES];
-float          g_fRocketClassControlDelay[MAX_ROCKET_CLASSES];
-float          g_fRocketClassDragTimeMin[MAX_ROCKET_CLASSES];
-float          g_fRocketClassDragTimeMax[MAX_ROCKET_CLASSES];
-float          g_fRocketClassTargetWeight[MAX_ROCKET_CLASSES];
-DataPack       g_hRocketClassCmdsOnSpawn[MAX_ROCKET_CLASSES];
-DataPack       g_hRocketClassCmdsOnDeflect[MAX_ROCKET_CLASSES];
-DataPack       g_hRocketClassCmdsOnKill[MAX_ROCKET_CLASSES];
-DataPack       g_hRocketClassCmdsOnExplode[MAX_ROCKET_CLASSES];
-DataPack       g_hRocketClassCmdsOnNoTarget[MAX_ROCKET_CLASSES];
-int            g_iRocketClassMaxBounces[MAX_ROCKET_CLASSES];
-float          g_fRocketClassBounceScale[MAX_ROCKET_CLASSES];
-int            g_iRocketClassCount;
+char					 g_strRocketClassModel[MAX_ROCKET_CLASSES][PLATFORM_MAX_PATH];
+RocketFlags		 g_iRocketClassFlags[MAX_ROCKET_CLASSES];
+float					 g_fRocketClassBeepInterval[MAX_ROCKET_CLASSES];
+char					 g_strRocketClassSpawnSound[MAX_ROCKET_CLASSES][PLATFORM_MAX_PATH];
+char					 g_strRocketClassBeepSound[MAX_ROCKET_CLASSES][PLATFORM_MAX_PATH];
+char					 g_strRocketClassAlertSound[MAX_ROCKET_CLASSES][PLATFORM_MAX_PATH];
+float					 g_fRocketClassCritChance[MAX_ROCKET_CLASSES];
+float					 g_fRocketClassDamage[MAX_ROCKET_CLASSES];
+float					 g_fRocketClassDamageIncrement[MAX_ROCKET_CLASSES];
+float					 g_fRocketClassSpeed[MAX_ROCKET_CLASSES];
+float					 g_fRocketClassSpeedIncrement[MAX_ROCKET_CLASSES];
+float					 g_fRocketClassSpeedLimit[MAX_ROCKET_CLASSES];
+float					 g_fRocketClassTurnRate[MAX_ROCKET_CLASSES];
+float					 g_fRocketClassTurnRateIncrement[MAX_ROCKET_CLASSES];
+float					 g_fRocketClassTurnRateLimit[MAX_ROCKET_CLASSES];
+float					 g_fRocketClassElevationRate[MAX_ROCKET_CLASSES];
+float					 g_fRocketClassElevationLimit[MAX_ROCKET_CLASSES];
+float					 g_fRocketClassRocketsModifier[MAX_ROCKET_CLASSES];
+float					 g_fRocketClassPlayerModifier[MAX_ROCKET_CLASSES];
+float					 g_fRocketClassControlDelay[MAX_ROCKET_CLASSES];
+float					 g_fRocketClassDragTimeMin[MAX_ROCKET_CLASSES];
+float					 g_fRocketClassDragTimeMax[MAX_ROCKET_CLASSES];
+float					 g_fRocketClassTargetWeight[MAX_ROCKET_CLASSES];
+DataPack			 g_hRocketClassCmdsOnSpawn[MAX_ROCKET_CLASSES];
+DataPack			 g_hRocketClassCmdsOnDeflect[MAX_ROCKET_CLASSES];
+DataPack			 g_hRocketClassCmdsOnKill[MAX_ROCKET_CLASSES];
+DataPack			 g_hRocketClassCmdsOnExplode[MAX_ROCKET_CLASSES];
+DataPack			 g_hRocketClassCmdsOnNoTarget[MAX_ROCKET_CLASSES];
+int						 g_iRocketClassMaxBounces[MAX_ROCKET_CLASSES];
+float					 g_fRocketClassBounceScale[MAX_ROCKET_CLASSES];
+int						 g_iRocketClassCount;
 
 // Spawner classes
-char      g_strSpawnersName[MAX_SPAWNER_CLASSES][32];
-int       g_iSpawnersMaxRockets[MAX_SPAWNER_CLASSES];
-float     g_fSpawnersInterval[MAX_SPAWNER_CLASSES];
-ArrayList g_hSpawnersChancesTable[MAX_SPAWNER_CLASSES];
-StringMap g_hSpawnersTrie;
-int       g_iSpawnersCount;
+char					 g_strSpawnersName[MAX_SPAWNER_CLASSES][32];
+int						 g_iSpawnersMaxRockets[MAX_SPAWNER_CLASSES];
+float					 g_fSpawnersInterval[MAX_SPAWNER_CLASSES];
+ArrayList			 g_hSpawnersChancesTable[MAX_SPAWNER_CLASSES];
+StringMap			 g_hSpawnersTrie;
+int						 g_iSpawnersCount;
 
 // Array containing the spawn points for the Red team, and
 // their associated spawner class.
-int g_iCurrentRedSpawn;
-int g_iSpawnPointsRedCount;
-int g_iSpawnPointsRedClass[MAX_SPAWN_POINTS];
-int g_iSpawnPointsRedEntity[MAX_SPAWN_POINTS];
+int						 g_iCurrentRedSpawn;
+int						 g_iSpawnPointsRedCount;
+int						 g_iSpawnPointsRedClass[MAX_SPAWN_POINTS];
+int						 g_iSpawnPointsRedEntity[MAX_SPAWN_POINTS];
 
 // Array containing the spawn points for the Blu team, and
 // their associated spawner class.
-int g_iCurrentBluSpawn;
-int g_iSpawnPointsBluCount;
-int g_iSpawnPointsBluClass[MAX_SPAWN_POINTS];
-int g_iSpawnPointsBluEntity[MAX_SPAWN_POINTS];
+int						 g_iCurrentBluSpawn;
+int						 g_iSpawnPointsBluCount;
+int						 g_iSpawnPointsBluClass[MAX_SPAWN_POINTS];
+int						 g_iSpawnPointsBluEntity[MAX_SPAWN_POINTS];
 
 // The default spawner class.
-int g_iDefaultRedSpawner;
-int g_iDefaultBluSpawner;
+int						 g_iDefaultRedSpawner;
+int						 g_iDefaultBluSpawner;
 
 // -----<<< Forward handles >>>-----
-Handle g_hForwardOnRocketCreated;
-Handle g_hForwardOnRocketCreatedPre;
-Handle g_hForwardOnRocketDeflect;
-Handle g_hForwardOnRocketDeflectPre;
-Handle g_hForwardOnRocketSteal;
-Handle g_hForwardOnRocketNoTarget;
-Handle g_hForwardOnRocketDelay;
-Handle g_hForwardOnRocketBounce;
-Handle g_hForwardOnRocketBouncePre;
-Handle g_hForwardOnRocketsConfigExecuted;
-Handle g_hForwardOnRocketStateChanged;
+Handle				 g_hForwardOnRocketCreated;
+Handle				 g_hForwardOnRocketCreatedPre;
+Handle				 g_hForwardOnRocketDeflect;
+Handle				 g_hForwardOnRocketDeflectPre;
+Handle				 g_hForwardOnRocketSteal;
+Handle				 g_hForwardOnRocketNoTarget;
+Handle				 g_hForwardOnRocketDelay;
+Handle				 g_hForwardOnRocketBounce;
+Handle				 g_hForwardOnRocketBouncePre;
+Handle				 g_hForwardOnRocketsConfigExecuted;
+Handle				 g_hForwardOnRocketStateChanged;
 
 // *********************************************************************************
 // PLUGIN
 // *********************************************************************************
 public Plugin myinfo =
 {
-	name        = PLUGIN_NAME,
-	author      = PLUGIN_AUTHOR,
+	name				= PLUGIN_NAME,
+	author			= PLUGIN_AUTHOR,
 	description = PLUGIN_NAME,
-	version     = PLUGIN_VERSION,
-	url         = PLUGIN_CONTACT
+	version			= PLUGIN_VERSION,
+	url					= PLUGIN_CONTACT
 };
 
 // *********************************************************************************
@@ -197,19 +197,19 @@ public void OnPluginStart()
 	LoadTranslations("tfdb.phrases.txt");
 
 	CreateConVar("tf_dodgeball_version", PLUGIN_VERSION, PLUGIN_NAME, _);
-	g_hCvarEnabled                = CreateConVar("tf_dodgeball_enabled", "1", "Enable Dodgeball on TFDB maps?", _, true, 0.0, true, 1.0);
-	g_hCvarEnableCfgFile          = CreateConVar("tf_dodgeball_enablecfg", "sourcemod/dodgeball_enable.cfg", "Config file to execute when enabling the Dodgeball game mode.");
-	g_hCvarDisableCfgFile         = CreateConVar("tf_dodgeball_disablecfg", "sourcemod/dodgeball_disable.cfg", "Config file to execute when disabling the Dodgeball game mode.");
-	g_hCvarStealPreventionNumber  = CreateConVar("tf_dodgeball_sp_number", "3", "How many steals before you get slayed?", _, true, 0.0, false);
-	g_hCvarStealPreventionDamage  = CreateConVar("tf_dodgeball_sp_damage", "0", "Reduce all damage on stolen rockets?", _, true, 0.0, true, 1.0);
-	g_hCvarStealDistance          = CreateConVar("tf_dodgeball_sp_distance", "48.0", "The distance between players for a steal to register.", _, true, 0.0, false);
-	g_hCvarDelayPrevention        = CreateConVar("tf_dodgeball_delay_prevention", "1", "Enable delay prevention?", _, true, 0.0, true, 1.0);
-	g_hCvarDelayPreventionTime    = CreateConVar("tf_dodgeball_dp_time", "5", "How much time (in seconds) before delay prevention activates?", _, true, 0.0, false);
+	g_hCvarEnabled								= CreateConVar("tf_dodgeball_enabled", "1", "Enable Dodgeball on TFDB maps?", _, true, 0.0, true, 1.0);
+	g_hCvarEnableCfgFile					= CreateConVar("tf_dodgeball_enablecfg", "sourcemod/dodgeball_enable.cfg", "Config file to execute when enabling the Dodgeball game mode.");
+	g_hCvarDisableCfgFile					= CreateConVar("tf_dodgeball_disablecfg", "sourcemod/dodgeball_disable.cfg", "Config file to execute when disabling the Dodgeball game mode.");
+	g_hCvarStealPreventionNumber	= CreateConVar("tf_dodgeball_sp_number", "3", "How many steals before you get slayed?", _, true, 0.0, false);
+	g_hCvarStealPreventionDamage	= CreateConVar("tf_dodgeball_sp_damage", "0", "Reduce all damage on stolen rockets?", _, true, 0.0, true, 1.0);
+	g_hCvarStealDistance					= CreateConVar("tf_dodgeball_sp_distance", "48.0", "The distance between players for a steal to register.", _, true, 0.0, false);
+	g_hCvarDelayPrevention				= CreateConVar("tf_dodgeball_delay_prevention", "1", "Enable delay prevention?", _, true, 0.0, true, 1.0);
+	g_hCvarDelayPreventionTime		= CreateConVar("tf_dodgeball_dp_time", "5", "How much time (in seconds) before delay prevention activates?", _, true, 0.0, false);
 	g_hCvarDelayPreventionSpeedup = CreateConVar("tf_dodgeball_dp_speedup", "100", "How much speed (in hammer units per second) should the rocket gain when delayed?", _, true, 0.0, false);
 	g_hCvarNoTargetRedirectDamage = CreateConVar("tf_dodgeball_redirect_damage", "1", "Reduce all damage when a rocket has an invalid target?", _, true, 0.0, true, 1.0);
 
-	g_hSpawnersTrie = new StringMap();
-	g_fTickModifier = 0.1 / GetTickInterval();
+	g_hSpawnersTrie								= new StringMap();
+	g_fTickModifier								= 0.1 / GetTickInterval();
 
 	AddTempEntHook("TFExplosion", OnTFExplosion);
 
@@ -455,27 +455,27 @@ public APLRes AskPluginLoad2(Handle hMyself, bool bLate, char[] strError, int iE
 void SetupForwards()
 {
 	// Rocket index, rocket entity
-	g_hForwardOnRocketCreated         = CreateGlobalForward("TFDB_OnRocketCreated", ET_Ignore, Param_Cell, Param_Cell);
+	g_hForwardOnRocketCreated					= CreateGlobalForward("TFDB_OnRocketCreated", ET_Ignore, Param_Cell, Param_Cell);
 	// Rocket index, rocket class, rocket flags
-	g_hForwardOnRocketCreatedPre      = CreateGlobalForward("TFDB_OnRocketCreatedPre", ET_Event, Param_Cell, Param_CellByRef, Param_CellByRef);
+	g_hForwardOnRocketCreatedPre			= CreateGlobalForward("TFDB_OnRocketCreatedPre", ET_Event, Param_Cell, Param_CellByRef, Param_CellByRef);
 	// Rocket index, rocket entity, rocket owner
-	g_hForwardOnRocketDeflect         = CreateGlobalForward("TFDB_OnRocketDeflect", ET_Ignore, Param_Cell, Param_Cell, Param_Cell);
+	g_hForwardOnRocketDeflect					= CreateGlobalForward("TFDB_OnRocketDeflect", ET_Ignore, Param_Cell, Param_Cell, Param_Cell);
 	// Rocket index, rocket entity, rocket owner, rocket target
-	g_hForwardOnRocketDeflectPre      = CreateGlobalForward("TFDB_OnRocketDeflectPre", ET_Event, Param_Cell, Param_Cell, Param_Cell, Param_CellByRef);
+	g_hForwardOnRocketDeflectPre			= CreateGlobalForward("TFDB_OnRocketDeflectPre", ET_Event, Param_Cell, Param_Cell, Param_Cell, Param_CellByRef);
 	// Rocket index, stealer, rocket target, stolen rockets count
-	g_hForwardOnRocketSteal           = CreateGlobalForward("TFDB_OnRocketSteal", ET_Ignore, Param_Cell, Param_Cell, Param_Cell, Param_Cell);
+	g_hForwardOnRocketSteal						= CreateGlobalForward("TFDB_OnRocketSteal", ET_Ignore, Param_Cell, Param_Cell, Param_Cell, Param_Cell);
 	// Rocket index, rocket target, previous target
-	g_hForwardOnRocketNoTarget        = CreateGlobalForward("TFDB_OnRocketNoTarget", ET_Ignore, Param_Cell, Param_Cell, Param_Cell);
+	g_hForwardOnRocketNoTarget				= CreateGlobalForward("TFDB_OnRocketNoTarget", ET_Ignore, Param_Cell, Param_Cell, Param_Cell);
 	// Rocket index, delayer
-	g_hForwardOnRocketDelay           = CreateGlobalForward("TFDB_OnRocketDelay", ET_Ignore, Param_Cell, Param_Cell);
+	g_hForwardOnRocketDelay						= CreateGlobalForward("TFDB_OnRocketDelay", ET_Ignore, Param_Cell, Param_Cell);
 	// Rocket index, rocket entity
-	g_hForwardOnRocketBounce          = CreateGlobalForward("TFDB_OnRocketBounce", ET_Ignore, Param_Cell, Param_Cell);
+	g_hForwardOnRocketBounce					= CreateGlobalForward("TFDB_OnRocketBounce", ET_Ignore, Param_Cell, Param_Cell);
 	// Rocket index, rocket entity, angles, velocity
-	g_hForwardOnRocketBouncePre       = CreateGlobalForward("TFDB_OnRocketBouncePre", ET_Event, Param_Cell, Param_Cell, Param_Array, Param_Array);
+	g_hForwardOnRocketBouncePre				= CreateGlobalForward("TFDB_OnRocketBouncePre", ET_Event, Param_Cell, Param_Cell, Param_Array, Param_Array);
 	// Config file
 	g_hForwardOnRocketsConfigExecuted = CreateGlobalForward("TFDB_OnRocketsConfigExecuted", ET_Ignore, Param_String);
 	// Rocket index, old state, new state
-	g_hForwardOnRocketStateChanged    = CreateGlobalForward("TFDB_OnRocketStateChanged", ET_Ignore, Param_Cell, Param_Cell, Param_Cell);
+	g_hForwardOnRocketStateChanged		= CreateGlobalForward("TFDB_OnRocketStateChanged", ET_Ignore, Param_Cell, Param_Cell, Param_Cell);
 }
 
 /* OnConfigsExecuted()
@@ -604,9 +604,9 @@ void EnableDodgeBall()
 	ServerCommand("exec \"%s\"", strCfgFile);
 
 	// Done.
-	g_bEnabled      = true;
+	g_bEnabled			= true;
 	g_bRoundStarted = false;
-	g_iRoundCount   = 0;
+	g_iRoundCount		= 0;
 }
 
 /* DisableDodgeBall()
@@ -651,14 +651,14 @@ void DisableDodgeBall()
 	ServerCommand("exec \"%s\"", strCfgFile);
 
 	// Done.
-	g_bEnabled      = false;
+	g_bEnabled			= false;
 	g_bRoundStarted = false;
-	g_iRoundCount   = 0;
+	g_iRoundCount		= 0;
 }
 
 public void OnClientDisconnect(int iClient)
 {
-	bStealArray[iClient].stoleRocket   = false;
+	bStealArray[iClient].stoleRocket	 = false;
 	bStealArray[iClient].rocketsStolen = 0;
 
 	if (iClient == g_iLastDeadClient)
@@ -691,7 +691,7 @@ public void OnRoundStart(Event hEvent, char[] strEventName, bool bDontBroadcast)
 
 	for (int iClient = 1; iClient <= MaxClients; iClient++)
 	{
-		bStealArray[iClient].stoleRocket   = false;
+		bStealArray[iClient].stoleRocket	 = false;
 		bStealArray[iClient].rocketsStolen = 0;
 	}
 }
@@ -711,13 +711,13 @@ public void OnSetupFinished(Event hEvent, char[] strEventName, bool bDontBroadca
 	if (g_iLastDeadTeam == 0) g_iLastDeadTeam = GetURandomIntRange(view_as<int>(TFTeam_Red), view_as<int>(TFTeam_Blue));
 	if (!IsValidClient(g_iLastDeadClient)) g_iLastDeadClient = 0;
 
-	g_hLogicTimer      = CreateTimer(FPS_LOGIC_INTERVAL, OnDodgeBallGameFrame, _, TIMER_REPEAT);
-	g_iPlayerCount     = CountAlivePlayers();
-	g_iRocketsFired    = 0;
+	g_hLogicTimer			 = CreateTimer(FPS_LOGIC_INTERVAL, OnDodgeBallGameFrame, _, TIMER_REPEAT);
+	g_iPlayerCount		 = CountAlivePlayers();
+	g_iRocketsFired		 = 0;
 	g_iCurrentRedSpawn = 0;
 	g_iCurrentBluSpawn = 0;
-	g_fNextSpawnTime   = GetGameTime();
-	g_bRoundStarted    = true;
+	g_fNextSpawnTime	 = GetGameTime();
+	g_bRoundStarted		 = true;
 	g_iRoundCount++;
 }
 
@@ -785,26 +785,26 @@ public void OnPlayerDeath(Event hEvent, char[] strEventName, bool bDontBroadcast
 	SetRandomSeed(view_as<int>(GetGameTime()));
 
 	int iAttacker = GetClientOfUserId(hEvent.GetInt("attacker"));
-	int iVictim   = GetClientOfUserId(hEvent.GetInt("userid"));
+	int iVictim		= GetClientOfUserId(hEvent.GetInt("userid"));
 
 	if (!IsValidClient(iVictim)) return;
 
-	bStealArray[iVictim].stoleRocket   = false;
+	bStealArray[iVictim].stoleRocket	 = false;
 	bStealArray[iVictim].rocketsStolen = 0;
 
-	g_iLastDeadClient = iVictim;
-	g_iLastDeadTeam   = GetClientTeam(iVictim);
+	g_iLastDeadClient									 = iVictim;
+	g_iLastDeadTeam										 = GetClientTeam(iVictim);
 
-	int iInflictor = hEvent.GetInt("inflictor_entindex");
-	int iIndex     = FindRocketByEntity(iInflictor);
+	int iInflictor										 = hEvent.GetInt("inflictor_entindex");
+	int iIndex												 = FindRocketByEntity(iInflictor);
 
 	if (iIndex == -1) return;
 
-	int   iClass       = g_iRocketClass[iIndex];
-	int   iTarget      = EntRefToEntIndex(g_iRocketTarget[iIndex]);
-	float fSpeed       = g_fRocketSpeed[iIndex];
-	float fMphSpeed    = g_fRocketMphSpeed[iIndex];
-	int   iDeflections = g_iRocketDeflections[iIndex];
+	int		iClass			 = g_iRocketClass[iIndex];
+	int		iTarget			 = EntRefToEntIndex(g_iRocketTarget[iIndex]);
+	float fSpeed			 = g_fRocketSpeed[iIndex];
+	float fMphSpeed		 = g_fRocketMphSpeed[iIndex];
+	int		iDeflections = g_iRocketDeflections[iIndex];
 
 	if ((g_iRocketFlags[iIndex] & RocketFlag_OnExplodeCmd) && !(g_iRocketFlags[iIndex] & RocketFlag_Exploded))
 	{
@@ -914,7 +914,7 @@ public Action OnBroadcastAudio(Event hEvent, char[] strEventName, bool bDontBroa
 public void OnObjectDeflected(Event hEvent, char[] strEventName, bool bDontBroadcast)
 {
 	int iEntity = hEvent.GetInt("object_entindex");
-	int iIndex  = FindRocketByEntity(iEntity);
+	int iIndex	= FindRocketByEntity(iEntity);
 
 	if (iIndex == -1) return;
 
@@ -997,7 +997,7 @@ public Action OnDodgeBallGameFrame(Handle hTimer, any Data)
 			// ! Issues: Because "OnSetupFinished" doesn't work properly, I think. Which results these to be -1. And halting the whole gamemode.
 			// ! maybe need to call these globally first before the dodgeball timer, and ensure they are not -1.
 			int iSpawnerEntity = g_iSpawnPointsRedEntity[g_iCurrentRedSpawn];
-			int iSpawnerClass  = g_iSpawnPointsRedClass[g_iCurrentRedSpawn];
+			int iSpawnerClass	 = g_iSpawnPointsRedClass[g_iCurrentRedSpawn];
 
 			if (g_iRocketCount < g_iSpawnersMaxRockets[iSpawnerClass])
 			{
@@ -1008,7 +1008,7 @@ public Action OnDodgeBallGameFrame(Handle hTimer, any Data)
 		else
 		{
 			int iSpawnerEntity = g_iSpawnPointsBluEntity[g_iCurrentBluSpawn];
-			int iSpawnerClass  = g_iSpawnPointsBluClass[g_iCurrentBluSpawn];
+			int iSpawnerClass	 = g_iSpawnPointsBluClass[g_iCurrentBluSpawn];
 
 			if (g_iRocketCount < g_iSpawnersMaxRockets[iSpawnerClass])
 			{
@@ -1058,13 +1058,13 @@ void CreateRocket(int iSpawnerEntity, int iSpawnerClass, int iTeam, int iClass =
 	if (iIndex == -1) return;
 
 	// Fetch a random rocket class and its parameters.
-	iClass             = iClass == -1 ? GetRandomRocketClass(iSpawnerClass) : iClass;
-	RocketFlags iFlags = g_iRocketClassFlags[iClass];
+	iClass								= iClass == -1 ? GetRandomRocketClass(iSpawnerClass) : iClass;
+	RocketFlags iFlags		= g_iRocketClassFlags[iClass];
 
-	int         iClassRef = iClass;
+	int					iClassRef = iClass;
 	RocketFlags iFlagsRef = iFlags;
 
-	Action aResult = Forward_OnRocketCreatedPre(iIndex, iClassRef, iFlagsRef);
+	Action			aResult		= Forward_OnRocketCreatedPre(iIndex, iClassRef, iFlagsRef);
 
 	if (aResult == Plugin_Stop || aResult == Plugin_Handled)
 	{
@@ -1095,7 +1095,7 @@ void CreateRocket(int iSpawnerEntity, int iSpawnerClass, int iTeam, int iClass =
 
 	// Setup rocket structure with the newly created entity.
 	int iTargetTeam = (TestFlags(iFlags, RocketFlag_IsNeutral)) ? 0 : GetAnalogueTeam(iTeam);
-	int iTarget     = SelectTarget(iTargetTeam);
+	int iTarget			= SelectTarget(iTargetTeam);
 	LogMessage("Rocket %d: Target %d", iIndex, iTarget);
 
 	// In order for the object_deflected event to fire, the old (previous) owner must be a valid client
@@ -1107,19 +1107,19 @@ void CreateRocket(int iSpawnerEntity, int iSpawnerClass, int iTeam, int iClass =
 	SetEntPropEnt(iEntity, Prop_Send, "m_hOriginalLauncher", iWeapon == -1 ? iEntity : iWeapon);
 	SetEntPropEnt(iEntity, Prop_Send, "m_hLauncher", iWeapon == -1 ? iEntity : iWeapon);
 
-	float fModifier                     = CalculateModifier(iClass, 0);
-	g_bRocketIsValid[iIndex]            = true;
-	g_iRocketFlags[iIndex]              = iFlags;
-	g_iRocketEntity[iIndex]             = EntIndexToEntRef(iEntity);
-	g_iRocketTarget[iIndex]             = EntIndexToEntRef(iTarget);
-	g_iRocketClass[iIndex]              = iClass;
-	g_iRocketDeflections[iIndex]        = 0;
-	g_iRocketEventDeflections[iIndex]   = 0;
-	g_iRocketBounces[iIndex]            = 0;
+	float fModifier											= CalculateModifier(iClass, 0);
+	g_bRocketIsValid[iIndex]						= true;
+	g_iRocketFlags[iIndex]							= iFlags;
+	g_iRocketEntity[iIndex]							= EntIndexToEntRef(iEntity);
+	g_iRocketTarget[iIndex]							= EntIndexToEntRef(iTarget);
+	g_iRocketClass[iIndex]							= iClass;
+	g_iRocketDeflections[iIndex]				= 0;
+	g_iRocketEventDeflections[iIndex]		= 0;
+	g_iRocketBounces[iIndex]						= 0;
 	g_fRocketLastDeflectionTime[iIndex] = GetGameTime();
-	g_fRocketLastBeepTime[iIndex]       = GetGameTime();
-	g_fRocketSpeed[iIndex]              = CalculateRocketSpeed(iClass, fModifier);
-	g_fRocketMphSpeed[iIndex]           = CalculateRocketSpeed(iClass, fModifier) * 0.042614;
+	g_fRocketLastBeepTime[iIndex]				= GetGameTime();
+	g_fRocketSpeed[iIndex]							= CalculateRocketSpeed(iClass, fModifier);
+	g_fRocketMphSpeed[iIndex]						= CalculateRocketSpeed(iClass, fModifier) * 0.042614;
 	Internal_SetRocketState(iIndex, RocketState_None);
 
 	CopyVectors(fDirection, g_fRocketDirection[iIndex]);
@@ -1147,7 +1147,7 @@ void CreateRocket(int iSpawnerEntity, int iSpawnerClass, int iTeam, int iClass =
 	g_iRocketCount++;
 	g_iRocketsFired++;
 	g_fLastSpawnTime[iIndex] = GetGameTime();
-	g_fNextSpawnTime         = GetGameTime() + g_fSpawnersInterval[iSpawnerClass];
+	g_fNextSpawnTime				 = GetGameTime() + g_fSpawnersInterval[iSpawnerClass];
 
 	SDKHook(iEntity, SDKHook_StartTouch, OnStartTouch);
 
@@ -1254,14 +1254,14 @@ int FindRocketByEntity(int iEntity)
 void HomingRocketThink(int iIndex)
 {
 	// Retrieve the rocket's attributes.
-	int         iEntity          = EntRefToEntIndex(g_iRocketEntity[iIndex]);
-	int         iClass           = g_iRocketClass[iIndex];
-	RocketFlags iFlags           = g_iRocketFlags[iIndex];
-	int         iTarget          = EntRefToEntIndex(g_iRocketTarget[iIndex]);
-	int         iTeam            = GetEntProp(iEntity, Prop_Send, "m_iTeamNum", 1);
-	int         iTargetTeam      = (TestFlags(iFlags, RocketFlag_IsNeutral)) ? 0 : GetAnalogueTeam(iTeam);
-	int         iDeflectionCount = g_iRocketEventDeflections[iIndex];
-	float       fModifier        = CalculateModifier(iClass, iDeflectionCount);
+	int					iEntity					 = EntRefToEntIndex(g_iRocketEntity[iIndex]);
+	int					iClass					 = g_iRocketClass[iIndex];
+	RocketFlags iFlags					 = g_iRocketFlags[iIndex];
+	int					iTarget					 = EntRefToEntIndex(g_iRocketTarget[iIndex]);
+	int					iTeam						 = GetEntProp(iEntity, Prop_Send, "m_iTeamNum", 1);
+	int					iTargetTeam			 = (TestFlags(iFlags, RocketFlag_IsNeutral)) ? 0 : GetAnalogueTeam(iTeam);
+	int					iDeflectionCount = g_iRocketEventDeflections[iIndex];
+	float				fModifier				 = CalculateModifier(iClass, iDeflectionCount);
 
 	if ((iDeflectionCount > g_iRocketDeflections[iIndex]) && !(g_iRocketState[iIndex] & RocketState_Dragging))
 	{
@@ -1302,7 +1302,7 @@ void HomingRocketThink(int iIndex)
 			if (!IsValidClient(iTarget, true))
 			{
 				int iOwner = iTarget;
-				iTarget    = SelectTarget(iTargetTeam, iIndex);
+				iTarget		 = SelectTarget(iTargetTeam, iIndex);
 
 				if (!IsValidClient(iTarget, true)) return;
 
@@ -1334,11 +1334,11 @@ void HomingRocketThink(int iIndex)
 				}
 
 				// Set new target & deflection count
-				iTarget                      = SelectTarget(iTargetTeam, iIndex);
-				g_iRocketTarget[iIndex]      = EntIndexToEntRef(iTarget);
+				iTarget											 = SelectTarget(iTargetTeam, iIndex);
+				g_iRocketTarget[iIndex]			 = EntIndexToEntRef(iTarget);
 				g_iRocketDeflections[iIndex] = iDeflectionCount;
-				g_fRocketSpeed[iIndex]       = CalculateRocketSpeed(iClass, fModifier);
-				g_fRocketMphSpeed[iIndex]    = CalculateRocketSpeed(iClass, fModifier) * 0.042614;
+				g_fRocketSpeed[iIndex]			 = CalculateRocketSpeed(iClass, fModifier);
+				g_fRocketMphSpeed[iIndex]		 = CalculateRocketSpeed(iClass, fModifier) * 0.042614;
 				SetEntDataFloat(iEntity, FindSendPropInfo("CTFProjectile_Rocket", "m_iDeflected") + 4, CalculateRocketDamage(iClass, fModifier), true);
 
 				if (TestFlags(iFlags, RocketFlag_ElevateOnDeflect)) g_iRocketFlags[iIndex] |= RocketFlag_Elevating;
@@ -1358,9 +1358,9 @@ void HomingRocketThink(int iIndex)
 					SetEntProp(iEntity, Prop_Send, "m_iTeamNum", 1, 1);
 				}
 
-				int iTargetRef = iTarget;
+				int		 iTargetRef = iTarget;
 
-				Action aResult = Forward_OnRocketDeflectPre(iIndex, iEntity, iClient, iTargetRef);
+				Action aResult		= Forward_OnRocketDeflectPre(iIndex, iEntity, iClient, iTargetRef);
 
 				if (aResult == Plugin_Stop || aResult == Plugin_Handled)
 				{
@@ -1368,7 +1368,7 @@ void HomingRocketThink(int iIndex)
 				}
 				else if (aResult == Plugin_Changed)
 				{
-					iTarget                 = iTargetRef;
+					iTarget									= iTargetRef;
 					g_iRocketTarget[iIndex] = EntIndexToEntRef(iTarget);
 				}
 
@@ -1388,7 +1388,7 @@ void HomingRocketThink(int iIndex)
 				if ((GetGameTime() - g_fRocketLastDeflectionTime[iIndex]) >= g_fRocketClassControlDelay[iClass])
 				{
 					// Calculate turn rate and retrieve directions.
-					float        fTurnRate = CalculateRocketTurnRate(iClass, fModifier) / g_fTickModifier;
+					float				 fTurnRate = CalculateRocketTurnRate(iClass, fModifier) / g_fTickModifier;
 					static float fDirectionToTarget[3];
 					CalculateDirectionToClient(iEntity, iTarget, fDirectionToTarget);
 
@@ -1419,11 +1419,11 @@ void HomingRocketThink(int iIndex)
 void RocketOtherThink(int iIndex)
 {
 	// Retrieve the rocket's attributes.
-	int         iEntity          = EntRefToEntIndex(g_iRocketEntity[iIndex]);
-	int         iClass           = g_iRocketClass[iIndex];
-	RocketFlags iFlags           = g_iRocketFlags[iIndex];
-	int         iTarget          = EntRefToEntIndex(g_iRocketTarget[iIndex]);
-	int         iDeflectionCount = g_iRocketEventDeflections[iIndex];
+	int					iEntity					 = EntRefToEntIndex(g_iRocketEntity[iIndex]);
+	int					iClass					 = g_iRocketClass[iIndex];
+	RocketFlags iFlags					 = g_iRocketFlags[iIndex];
+	int					iTarget					 = EntRefToEntIndex(g_iRocketTarget[iIndex]);
+	int					iDeflectionCount = g_iRocketEventDeflections[iIndex];
 
 	if (!(iDeflectionCount > g_iRocketDeflections[iIndex]))
 	{
@@ -1458,20 +1458,20 @@ void RocketOtherThink(int iIndex)
 void RocketLegacyThink(int iIndex)
 {
 	// Retrieve the rocket's attributes.
-	int         iEntity          = EntRefToEntIndex(g_iRocketEntity[iIndex]);
-	int         iClass           = g_iRocketClass[iIndex];
-	RocketFlags iFlags           = g_iRocketFlags[iIndex];
-	int         iTarget          = EntRefToEntIndex(g_iRocketTarget[iIndex]);
-	int         iTeam            = GetEntProp(iEntity, Prop_Send, "m_iTeamNum", 1);
-	int         iTargetTeam      = (TestFlags(iFlags, RocketFlag_IsNeutral)) ? 0 : GetAnalogueTeam(iTeam);
-	int         iDeflectionCount = g_iRocketEventDeflections[iIndex];
-	float       fModifier        = CalculateModifier(iClass, iDeflectionCount);
+	int					iEntity					 = EntRefToEntIndex(g_iRocketEntity[iIndex]);
+	int					iClass					 = g_iRocketClass[iIndex];
+	RocketFlags iFlags					 = g_iRocketFlags[iIndex];
+	int					iTarget					 = EntRefToEntIndex(g_iRocketTarget[iIndex]);
+	int					iTeam						 = GetEntProp(iEntity, Prop_Send, "m_iTeamNum", 1);
+	int					iTargetTeam			 = (TestFlags(iFlags, RocketFlag_IsNeutral)) ? 0 : GetAnalogueTeam(iTeam);
+	int					iDeflectionCount = g_iRocketEventDeflections[iIndex];
+	float				fModifier				 = CalculateModifier(iClass, iDeflectionCount);
 
 	// Check if the target is available
 	if (!IsValidClient(iTarget, true))
 	{
 		int iOwner = iTarget;
-		iTarget    = SelectTarget(iTargetTeam, iIndex);
+		iTarget		 = SelectTarget(iTargetTeam, iIndex);
 
 		if (!IsValidClient(iTarget, true)) return;
 
@@ -1512,12 +1512,12 @@ void RocketLegacyThink(int iIndex)
 		}
 
 		// Set new target & deflection count
-		iTarget                             = SelectTarget(iTargetTeam, iIndex);
-		g_iRocketTarget[iIndex]             = EntIndexToEntRef(iTarget);
-		g_iRocketDeflections[iIndex]        = iDeflectionCount;
+		iTarget															= SelectTarget(iTargetTeam, iIndex);
+		g_iRocketTarget[iIndex]							= EntIndexToEntRef(iTarget);
+		g_iRocketDeflections[iIndex]				= iDeflectionCount;
 		g_fRocketLastDeflectionTime[iIndex] = GetGameTime();
-		g_fRocketSpeed[iIndex]              = CalculateRocketSpeed(iClass, fModifier);
-		g_fRocketMphSpeed[iIndex]           = CalculateRocketSpeed(iClass, fModifier) * 0.042614;
+		g_fRocketSpeed[iIndex]							= CalculateRocketSpeed(iClass, fModifier);
+		g_fRocketMphSpeed[iIndex]						= CalculateRocketSpeed(iClass, fModifier) * 0.042614;
 		SetEntDataFloat(iEntity, FindSendPropInfo("CTFProjectile_Rocket", "m_iDeflected") + 4, CalculateRocketDamage(iClass, fModifier), true);
 
 		if (TestFlags(iFlags, RocketFlag_ElevateOnDeflect)) g_iRocketFlags[iIndex] |= RocketFlag_Elevating;
@@ -1537,9 +1537,9 @@ void RocketLegacyThink(int iIndex)
 			SetEntProp(iEntity, Prop_Send, "m_iTeamNum", 1, 1);
 		}
 
-		int iTargetRef = iTarget;
+		int		 iTargetRef = iTarget;
 
-		Action aResult = Forward_OnRocketDeflectPre(iIndex, iEntity, iClient, iTargetRef);
+		Action aResult		= Forward_OnRocketDeflectPre(iIndex, iEntity, iClient, iTargetRef);
 
 		if (aResult == Plugin_Stop || aResult == Plugin_Handled)
 		{
@@ -1547,7 +1547,7 @@ void RocketLegacyThink(int iIndex)
 		}
 		else if (aResult == Plugin_Changed)
 		{
-			iTarget                 = iTargetRef;
+			iTarget									= iTargetRef;
 			g_iRocketTarget[iIndex] = EntIndexToEntRef(iTarget);
 		}
 
@@ -1567,7 +1567,7 @@ void RocketLegacyThink(int iIndex)
 		if ((GetGameTime() - g_fRocketLastDeflectionTime[iIndex]) >= g_fRocketClassControlDelay[iClass])
 		{
 			// Calculate turn rate and retrieve directions.
-			float        fTurnRate = CalculateRocketTurnRate(iClass, fModifier);
+			float				 fTurnRate = CalculateRocketTurnRate(iClass, fModifier);
 			static float fDirectionToTarget[3];
 			CalculateDirectionToClient(iEntity, iTarget, fDirectionToTarget);
 
@@ -1577,7 +1577,7 @@ void RocketLegacyThink(int iIndex)
 				if (g_fRocketDirection[iIndex][2] < g_fRocketClassElevationLimit[iClass])
 				{
 					g_fRocketDirection[iIndex][2] = FMin(g_fRocketDirection[iIndex][2] + g_fRocketClassElevationRate[iClass], g_fRocketClassElevationLimit[iClass]);
-					fDirectionToTarget[2]         = g_fRocketDirection[iIndex][2];
+					fDirectionToTarget[2]					= g_fRocketDirection[iIndex][2];
 				}
 				else
 				{
@@ -1669,7 +1669,7 @@ void CalculateDirectionToClient(int iEntity, int iClient, float fOut[3])
 ** -------------------------------------------------------------------------- */
 void ApplyRocketParameters(int iIndex)
 {
-	int          iEntity = EntRefToEntIndex(g_iRocketEntity[iIndex]);
+	int					 iEntity = EntRefToEntIndex(g_iRocketEntity[iIndex]);
 	static float fAngles[3];
 	GetVectorAngles(g_fRocketDirection[iIndex], fAngles);
 	static float fVelocity[3];
@@ -1696,11 +1696,11 @@ void UpdateRocketSkin(int iEntity, int iTeam, bool bNeutral)
 ** -------------------------------------------------------------------------- */
 int GetRandomRocketClass(int iSpawnerClass)
 {
-	int       iRandom       = GetURandomIntRange(1, 100);
-	ArrayList hTable        = g_hSpawnersChancesTable[iSpawnerClass];
-	int       iTableSize    = hTable.Length;
-	int       iChancesLower = 0;
-	int       iChancesUpper = 0;
+	int				iRandom				= GetURandomIntRange(1, 100);
+	ArrayList hTable				= g_hSpawnersChancesTable[iSpawnerClass];
+	int				iTableSize		= hTable.Length;
+	int				iChancesLower = 0;
+	int				iChancesUpper = 0;
 
 	for (int iEntry = 0; iEntry < iTableSize; iEntry++)
 	{
@@ -1767,10 +1767,10 @@ void DestroyRocketClasses()
 {
 	for (int iIndex = 0; iIndex < g_iRocketClassCount; iIndex++)
 	{
-		DataPack hCmdOnSpawn    = g_hRocketClassCmdsOnSpawn[iIndex];
-		DataPack hCmdOnKill     = g_hRocketClassCmdsOnKill[iIndex];
-		DataPack hCmdOnExplode  = g_hRocketClassCmdsOnExplode[iIndex];
-		DataPack hCmdOnDeflect  = g_hRocketClassCmdsOnDeflect[iIndex];
+		DataPack hCmdOnSpawn		= g_hRocketClassCmdsOnSpawn[iIndex];
+		DataPack hCmdOnKill			= g_hRocketClassCmdsOnKill[iIndex];
+		DataPack hCmdOnExplode	= g_hRocketClassCmdsOnExplode[iIndex];
+		DataPack hCmdOnDeflect	= g_hRocketClassCmdsOnDeflect[iIndex];
 		DataPack hCmdOnNoTarget = g_hRocketClassCmdsOnNoTarget[iIndex];
 
 		if (hCmdOnSpawn != null) delete hCmdOnSpawn;
@@ -1779,10 +1779,10 @@ void DestroyRocketClasses()
 		if (hCmdOnDeflect != null) delete hCmdOnDeflect;
 		if (hCmdOnNoTarget != null) delete hCmdOnNoTarget;
 
-		g_hRocketClassCmdsOnSpawn[iIndex]    = null;
-		g_hRocketClassCmdsOnKill[iIndex]     = null;
-		g_hRocketClassCmdsOnExplode[iIndex]  = null;
-		g_hRocketClassCmdsOnDeflect[iIndex]  = null;
+		g_hRocketClassCmdsOnSpawn[iIndex]		 = null;
+		g_hRocketClassCmdsOnKill[iIndex]		 = null;
+		g_hRocketClassCmdsOnExplode[iIndex]	 = null;
+		g_hRocketClassCmdsOnDeflect[iIndex]	 = null;
 		g_hRocketClassCmdsOnNoTarget[iIndex] = null;
 	}
 
@@ -1806,11 +1806,11 @@ void DestroySpawners()
 		delete g_hSpawnersChancesTable[iIndex];
 	}
 
-	g_iSpawnersCount       = 0;
+	g_iSpawnersCount			 = 0;
 	g_iSpawnPointsRedCount = 0;
 	g_iSpawnPointsBluCount = 0;
-	g_iDefaultRedSpawner   = -1;
-	g_iDefaultBluSpawner   = -1;
+	g_iDefaultRedSpawner	 = -1;
+	g_iDefaultBluSpawner	 = -1;
 	g_hSpawnersTrie.Clear();
 }
 
@@ -1825,7 +1825,7 @@ void PopulateSpawnPoints()
 	g_iSpawnPointsBluCount = 0;
 
 	// Iterate through all the info target points and check 'em out.
-	int iEntity = -1;
+	int iEntity						 = -1;
 
 	while ((iEntity = FindEntityByClassname(iEntity, "info_target")) != -1)
 	{
@@ -1839,7 +1839,7 @@ void PopulateSpawnPoints()
 			if (!IsValidRocket(iIndex)) iIndex = g_iDefaultRedSpawner;
 
 			// Upload to point list
-			g_iSpawnPointsRedClass[g_iSpawnPointsRedCount]  = iIndex;
+			g_iSpawnPointsRedClass[g_iSpawnPointsRedCount]	= iIndex;
 			g_iSpawnPointsRedEntity[g_iSpawnPointsRedCount] = iEntity;
 			g_iSpawnPointsRedCount++;
 		}
@@ -1851,7 +1851,7 @@ void PopulateSpawnPoints()
 			if (!IsValidRocket(iIndex)) iIndex = g_iDefaultBluSpawner;
 
 			// Upload to point list
-			g_iSpawnPointsBluClass[g_iSpawnPointsBluCount]  = iIndex;
+			g_iSpawnPointsBluClass[g_iSpawnPointsBluCount]	= iIndex;
 			g_iSpawnPointsBluEntity[g_iSpawnPointsBluCount] = iEntity;
 			g_iSpawnPointsBluCount++;
 		}
@@ -1916,7 +1916,7 @@ public Action CmdExplosion(int iArgs)
 	}
 
 	char strBuffer[8];
-	int  iClient;
+	int	 iClient;
 	GetCmdArg(1, strBuffer, sizeof(strBuffer));
 	iClient = StringToInt(strBuffer);
 
@@ -1975,11 +1975,11 @@ public Action CmdShockwave(int iArgs)
 		return Plugin_Handled;
 	}
 
-	static char  strBuffer[8];
-	int          iClient, iTeam;
+	static char	 strBuffer[8];
+	int					 iClient, iTeam;
 	static float fPosition[3];
-	int          iDamage;
-	float        fPushStrength, fRadius, fFalloffRadius;
+	int					 iDamage;
+	float				 fPushStrength, fRadius, fFalloffRadius;
 	GetCmdArg(1, strBuffer, sizeof(strBuffer));
 	iClient = StringToInt(strBuffer);
 	GetCmdArg(2, strBuffer, sizeof(strBuffer));
@@ -2007,7 +2007,7 @@ public Action CmdShockwave(int iArgs)
 		if (!(fDistanceToShockwave < fRadius)) continue;
 
 		static float fImpulse[3], fFinalPush;
-		int          iFinalDamage;
+		int					 iFinalDamage;
 		fImpulse[0] = fPlayerPosition[0] - fPosition[0];
 		fImpulse[1] = fPlayerPosition[1] - fPosition[1];
 		fImpulse[2] = fPlayerPosition[2] - fPosition[2];
@@ -2021,14 +2021,14 @@ public Action CmdShockwave(int iArgs)
 
 		if (fDistanceToShockwave < fFalloffRadius)
 		{
-			fFinalPush   = fPushStrength;
+			fFinalPush	 = fPushStrength;
 			iFinalDamage = iDamage;
 		}
 		else
 		{
 			float fImpact = (1.0 - ((fDistanceToShockwave - fFalloffRadius) / (fRadius - fFalloffRadius)));
-			fFinalPush    = fImpact * fPushStrength;
-			iFinalDamage  = RoundToFloor(fImpact * iDamage);
+			fFinalPush		= fImpact * fPushStrength;
+			iFinalDamage	= RoundToFloor(fImpact * iDamage);
 		}
 
 		ScaleVector(fImpulse, fFinalPush);
@@ -2148,9 +2148,9 @@ void ParseGeneral(KeyValues kvConfig)
 	kvConfig.GetString("web player url", g_strWebPlayerUrl, sizeof(g_strWebPlayerUrl));
 
 	g_bMusic[Music_RoundStart] = kvConfig.GetString("round start", g_strMusic[Music_RoundStart], PLATFORM_MAX_PATH) && g_strMusic[Music_RoundStart][0];
-	g_bMusic[Music_RoundWin]   = kvConfig.GetString("round end (win)", g_strMusic[Music_RoundWin], PLATFORM_MAX_PATH) && g_strMusic[Music_RoundWin][0];
-	g_bMusic[Music_RoundLose]  = kvConfig.GetString("round end (lose)", g_strMusic[Music_RoundLose], PLATFORM_MAX_PATH) && g_strMusic[Music_RoundLose][0];
-	g_bMusic[Music_Gameplay]   = kvConfig.GetString("gameplay", g_strMusic[Music_Gameplay], PLATFORM_MAX_PATH) && g_strMusic[Music_Gameplay][0];
+	g_bMusic[Music_RoundWin]	 = kvConfig.GetString("round end (win)", g_strMusic[Music_RoundWin], PLATFORM_MAX_PATH) && g_strMusic[Music_RoundWin][0];
+	g_bMusic[Music_RoundLose]	 = kvConfig.GetString("round end (lose)", g_strMusic[Music_RoundLose], PLATFORM_MAX_PATH) && g_strMusic[Music_RoundLose][0];
+	g_bMusic[Music_Gameplay]	 = kvConfig.GetString("gameplay", g_strMusic[Music_Gameplay], PLATFORM_MAX_PATH) && g_strMusic[Music_Gameplay][0];
 }
 
 /* ParseClasses()
@@ -2165,7 +2165,7 @@ void ParseClasses(KeyValues kvConfig)
 	kvConfig.GotoFirstSubKey();
 	do
 	{
-		int         iIndex = g_iRocketClassCount;
+		int					iIndex = g_iRocketClassCount;
 		RocketFlags iFlags;
 
 		// Basic parameters
@@ -2243,18 +2243,18 @@ void ParseClasses(KeyValues kvConfig)
 		if (kvConfig.GetNum("steal team check", 0) == 1) iFlags |= RocketFlag_StealTeamCheck;
 
 		// Movement parameters
-		g_fRocketClassDamage[iIndex]          = kvConfig.GetFloat("damage");
+		g_fRocketClassDamage[iIndex]					= kvConfig.GetFloat("damage");
 		g_fRocketClassDamageIncrement[iIndex] = kvConfig.GetFloat("damage increment");
-		g_fRocketClassCritChance[iIndex]      = kvConfig.GetFloat("critical chance");
-		g_fRocketClassSpeed[iIndex]           = kvConfig.GetFloat("speed");
-		g_fRocketClassSpeedIncrement[iIndex]  = kvConfig.GetFloat("speed increment");
+		g_fRocketClassCritChance[iIndex]			= kvConfig.GetFloat("critical chance");
+		g_fRocketClassSpeed[iIndex]						= kvConfig.GetFloat("speed");
+		g_fRocketClassSpeedIncrement[iIndex]	= kvConfig.GetFloat("speed increment");
 
 		if ((g_fRocketClassSpeedLimit[iIndex] = kvConfig.GetFloat("speed limit")) != 0.0)
 		{
 			iFlags |= RocketFlag_IsSpeedLimited;
 		}
 
-		g_fRocketClassTurnRate[iIndex]          = kvConfig.GetFloat("turn rate");
+		g_fRocketClassTurnRate[iIndex]					= kvConfig.GetFloat("turn rate");
 		g_fRocketClassTurnRateIncrement[iIndex] = kvConfig.GetFloat("turn rate increment");
 
 		if ((g_fRocketClassTurnRateLimit[iIndex] = kvConfig.GetFloat("turn rate limit")) != 0.0)
@@ -2262,19 +2262,19 @@ void ParseClasses(KeyValues kvConfig)
 			iFlags |= RocketFlag_IsTRLimited;
 		}
 
-		g_fRocketClassElevationRate[iIndex]   = kvConfig.GetFloat("elevation rate");
-		g_fRocketClassElevationLimit[iIndex]  = kvConfig.GetFloat("elevation limit");
-		g_fRocketClassControlDelay[iIndex]    = kvConfig.GetFloat("control delay");
-		g_fRocketClassDragTimeMin[iIndex]     = kvConfig.GetFloat("drag time min");
-		g_fRocketClassDragTimeMax[iIndex]     = kvConfig.GetFloat("drag time max");
-		g_iRocketClassMaxBounces[iIndex]      = kvConfig.GetNum("max bounces");
-		g_fRocketClassBounceScale[iIndex]     = kvConfig.GetFloat("bounce scale", 1.0);
-		g_fRocketClassPlayerModifier[iIndex]  = kvConfig.GetFloat("no. players modifier");
+		g_fRocketClassElevationRate[iIndex]		= kvConfig.GetFloat("elevation rate");
+		g_fRocketClassElevationLimit[iIndex]	= kvConfig.GetFloat("elevation limit");
+		g_fRocketClassControlDelay[iIndex]		= kvConfig.GetFloat("control delay");
+		g_fRocketClassDragTimeMin[iIndex]			= kvConfig.GetFloat("drag time min");
+		g_fRocketClassDragTimeMax[iIndex]			= kvConfig.GetFloat("drag time max");
+		g_iRocketClassMaxBounces[iIndex]			= kvConfig.GetNum("max bounces");
+		g_fRocketClassBounceScale[iIndex]			= kvConfig.GetFloat("bounce scale", 1.0);
+		g_fRocketClassPlayerModifier[iIndex]	= kvConfig.GetFloat("no. players modifier");
 		g_fRocketClassRocketsModifier[iIndex] = kvConfig.GetFloat("no. rockets modifier");
-		g_fRocketClassTargetWeight[iIndex]    = kvConfig.GetFloat("direction to target weight");
+		g_fRocketClassTargetWeight[iIndex]		= kvConfig.GetFloat("direction to target weight");
 
 		// Events
-		DataPack hCmds = null;
+		DataPack hCmds												= null;
 
 		kvConfig.GetString("on spawn", strBuffer, sizeof(strBuffer));
 		if ((hCmds = ParseCommands(strBuffer)) != null)
@@ -2336,8 +2336,8 @@ void ParseSpawners(KeyValues kvConfig)
 		// Basic parameters
 		kvConfig.GetSectionName(strBuffer, sizeof(strBuffer));
 		strcopy(g_strSpawnersName[iIndex], 32, strBuffer);
-		g_iSpawnersMaxRockets[iIndex] = kvConfig.GetNum("max rockets", 1);
-		g_fSpawnersInterval[iIndex]   = kvConfig.GetFloat("interval", 1.0);
+		g_iSpawnersMaxRockets[iIndex]		= kvConfig.GetNum("max rockets", 1);
+		g_fSpawnersInterval[iIndex]			= kvConfig.GetFloat("interval", 1.0);
 
 		// Chances table
 		g_hSpawnersChancesTable[iIndex] = new ArrayList();
@@ -2374,10 +2374,10 @@ DataPack ParseCommands(char[] strLine)
 		return null;
 	}
 
-	char strStrings[8][255];
-	int  iNumStrings = ExplodeString(strLine, ";", strStrings, 8, 255);
+	char		 strStrings[8][255];
+	int			 iNumStrings = ExplodeString(strLine, ";", strStrings, 8, 255);
 
-	DataPack hDataPack = new DataPack();
+	DataPack hDataPack	 = new DataPack();
 	hDataPack.WriteCell(iNumStrings);
 
 	for (int i = 0; i < iNumStrings; i++)
@@ -2491,23 +2491,23 @@ stock bool isInsideZone(int client)
 ** -------------------------------------------------------------------------- */
 stock int SelectTarget(int iTeam, int iRocket = -1)
 {
-	int          iTarget       = -1;
-	float        fTargetWeight = 0.0;
+	int					 iTarget			 = -1;
+	float				 fTargetWeight = 0.0;
 	static float fRocketPosition[3];
 	static float fRocketDirection[3];
-	float        fWeight;
-	bool         bUseRocket;
-	int          iOwner = -1;
+	float				 fWeight;
+	bool				 bUseRocket;
+	int					 iOwner = -1;
 
 	if (iRocket != -1)
 	{
-		int iClass  = g_iRocketClass[iRocket];
+		int iClass	= g_iRocketClass[iRocket];
 		int iEntity = EntRefToEntIndex(g_iRocketEntity[iRocket]);
-		iOwner      = GetEntPropEnt(iEntity, Prop_Send, "m_hOwnerEntity");
+		iOwner			= GetEntPropEnt(iEntity, Prop_Send, "m_hOwnerEntity");
 
 		GetEntPropVector(iEntity, Prop_Send, "m_vecOrigin", fRocketPosition);
 		CopyVectors(g_fRocketDirection[iRocket], fRocketDirection);
-		fWeight = g_fRocketClassTargetWeight[iClass];
+		fWeight		 = g_fRocketClassTargetWeight[iClass];
 
 		bUseRocket = true;
 	}
@@ -2539,7 +2539,7 @@ stock int SelectTarget(int iTeam, int iRocket = -1)
 
 		if ((iTarget == -1) || fNewWeight >= fTargetWeight)
 		{
-			iTarget       = iClient;
+			iTarget				= iClient;
 			fTargetWeight = fNewWeight;
 		}
 	}
@@ -2875,7 +2875,7 @@ public Action OnTouch(int iEntity, int iOther)
 		return Plugin_Continue;
 	}
 
-	int iClass = g_iRocketClass[iIndex];
+	int					 iClass = g_iRocketClass[iIndex];
 
 	static float vOrigin[3];
 	GetEntPropVector(iEntity, Prop_Data, "m_vecOrigin", vOrigin);
@@ -2971,8 +2971,8 @@ public bool TEF_ExcludeEntity(int iEntity, int iContentsMask, any aData)
 
 void CheckRoundDelays(int iIndex)
 {
-	int   iEntity      = EntRefToEntIndex(g_iRocketEntity[iIndex]);
-	int   iTarget      = EntRefToEntIndex(g_iRocketTarget[iIndex]);
+	int		iEntity			 = EntRefToEntIndex(g_iRocketEntity[iIndex]);
+	int		iTarget			 = EntRefToEntIndex(g_iRocketTarget[iIndex]);
 	float fTimeToCheck = g_iRocketDeflections[iIndex] == 0 ? g_fLastSpawnTime[iIndex] : g_fRocketLastDeflectionTime[iIndex];
 
 	if (iTarget == -1 || (GetGameTime() - fTimeToCheck) < g_hCvarDelayPreventionTime.FloatValue) return;
@@ -3042,7 +3042,7 @@ public Action OnTFExplosion(const char[] strTEName, const int[] iClients, int iN
 	TE_WriteNum("m_nSound", TE_ReadNum("m_nSound"));
 	TE_WriteNum("m_iCustomParticleIndex", TE_ReadNum("m_iCustomParticleIndex"));
 
-	bIgnoreHook = true;  // Mark the next hook as ignored before we send, otherwise it will loop
+	bIgnoreHook = true;	 // Mark the next hook as ignored before we send, otherwise it will loop
 
 	// send our modified TE
 	TE_Send(iClients, iNumClients, fDelay);
@@ -3099,9 +3099,9 @@ public any Native_GetRocketFlags(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketFlags(Handle hPlugin, int iNumParams)
 {
-	int iIndex = GetNativeCell(1);
+	int					iIndex		 = GetNativeCell(1);
 
-	RocketFlags iFlags = GetNativeCell(2);
+	RocketFlags iFlags		 = GetNativeCell(2);
 
 	g_iRocketFlags[iIndex] = iFlags;
 
@@ -3117,9 +3117,9 @@ public any Native_GetRocketTarget(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketTarget(Handle hPlugin, int iNumParams)
 {
-	int iIndex = GetNativeCell(1);
+	int iIndex							= GetNativeCell(1);
 
-	int iTarget = GetNativeCell(2);
+	int iTarget							= GetNativeCell(2);
 
 	g_iRocketTarget[iIndex] = iTarget;
 
@@ -3135,9 +3135,9 @@ public any Native_GetRocketEventDeflections(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketEventDeflections(Handle hPlugin, int iNumParams)
 {
-	int iIndex = GetNativeCell(1);
+	int iIndex												= GetNativeCell(1);
 
-	int iDeflections = GetNativeCell(2);
+	int iDeflections									= GetNativeCell(2);
 
 	g_iRocketEventDeflections[iIndex] = iDeflections;
 
@@ -3153,9 +3153,9 @@ public any Native_GetRocketDeflections(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketDeflections(Handle hPlugin, int iNumParams)
 {
-	int iIndex = GetNativeCell(1);
+	int iIndex									 = GetNativeCell(1);
 
-	int iDeflections = GetNativeCell(2);
+	int iDeflections						 = GetNativeCell(2);
 
 	g_iRocketDeflections[iIndex] = iDeflections;
 
@@ -3171,9 +3171,9 @@ public any Native_GetRocketClass(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClass(Handle hPlugin, int iNumParams)
 {
-	int iIndex = GetNativeCell(1);
+	int iIndex						 = GetNativeCell(1);
 
-	int iClass = GetNativeCell(2);
+	int iClass						 = GetNativeCell(2);
 
 	g_iRocketClass[iIndex] = iClass;
 
@@ -3194,9 +3194,9 @@ public any Native_GetRocketClassBehaviour(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassBehaviour(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int						 iClass						= GetNativeCell(1);
 
-	BehaviourTypes iBehaviour = GetNativeCell(2);
+	BehaviourTypes iBehaviour				= GetNativeCell(2);
 
 	g_iRocketClassBehaviour[iClass] = iBehaviour;
 
@@ -3212,9 +3212,9 @@ public any Native_GetRocketClassFlags(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassFlags(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int					iClass					= GetNativeCell(1);
 
-	RocketFlags iFlags = GetNativeCell(2);
+	RocketFlags iFlags					= GetNativeCell(2);
 
 	g_iRocketClassFlags[iClass] = iFlags;
 
@@ -3230,9 +3230,9 @@ public any Native_GetRocketClassDamage(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassDamage(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int		iClass								 = GetNativeCell(1);
 
-	float fDamage = GetNativeCell(2);
+	float fDamage								 = GetNativeCell(2);
 
 	g_fRocketClassDamage[iClass] = fDamage;
 
@@ -3248,9 +3248,9 @@ public any Native_GetRocketClassDamageIncrement(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassDamageIncrement(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int		iClass													= GetNativeCell(1);
 
-	float fDamage = GetNativeCell(2);
+	float fDamage													= GetNativeCell(2);
 
 	g_fRocketClassDamageIncrement[iClass] = fDamage;
 
@@ -3266,9 +3266,9 @@ public any Native_GetRocketClassSpeed(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassSpeed(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int		iClass								= GetNativeCell(1);
 
-	float fSpeed = GetNativeCell(2);
+	float fSpeed								= GetNativeCell(2);
 
 	g_fRocketClassSpeed[iClass] = fSpeed;
 
@@ -3284,9 +3284,9 @@ public any Native_GetRocketClassSpeedIncrement(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassSpeedIncrement(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int		iClass												 = GetNativeCell(1);
 
-	float fSpeed = GetNativeCell(2);
+	float fSpeed												 = GetNativeCell(2);
 
 	g_fRocketClassSpeedIncrement[iClass] = fSpeed;
 
@@ -3302,9 +3302,9 @@ public any Native_GetRocketClassSpeedLimit(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassSpeedLimit(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int		iClass										 = GetNativeCell(1);
 
-	float fSpeed = GetNativeCell(2);
+	float fSpeed										 = GetNativeCell(2);
 
 	g_fRocketClassSpeedLimit[iClass] = fSpeed;
 
@@ -3320,9 +3320,9 @@ public any Native_GetRocketClassTurnRate(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassTurnRate(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int		iClass									 = GetNativeCell(1);
 
-	float fTurnRate = GetNativeCell(2);
+	float fTurnRate								 = GetNativeCell(2);
 
 	g_fRocketClassTurnRate[iClass] = fTurnRate;
 
@@ -3338,9 +3338,9 @@ public any Native_GetRocketClassTurnRateIncrement(Handle hPlugin, int iNumParams
 
 public any Native_SetRocketClassTurnRateIncrement(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int		iClass														= GetNativeCell(1);
 
-	float fTurnRate = GetNativeCell(2);
+	float fTurnRate													= GetNativeCell(2);
 
 	g_fRocketClassTurnRateIncrement[iClass] = fTurnRate;
 
@@ -3356,9 +3356,9 @@ public any Native_GetRocketClassTurnRateLimit(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassTurnRateLimit(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int		iClass												= GetNativeCell(1);
 
-	float fTurnRate = GetNativeCell(2);
+	float fTurnRate											= GetNativeCell(2);
 
 	g_fRocketClassTurnRateLimit[iClass] = fTurnRate;
 
@@ -3374,9 +3374,9 @@ public any Native_GetRocketClassElevationRate(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassElevationRate(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int		iClass												= GetNativeCell(1);
 
-	float fElevation = GetNativeCell(2);
+	float fElevation										= GetNativeCell(2);
 
 	g_fRocketClassElevationRate[iClass] = fElevation;
 
@@ -3392,9 +3392,9 @@ public any Native_GetRocketClassElevationLimit(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassElevationLimit(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int		iClass												 = GetNativeCell(1);
 
-	float fElevation = GetNativeCell(2);
+	float fElevation										 = GetNativeCell(2);
 
 	g_fRocketClassElevationLimit[iClass] = fElevation;
 
@@ -3410,9 +3410,9 @@ public any Native_GetRocketClassRocketsModifier(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassRocketsModifier(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int		iClass													= GetNativeCell(1);
 
-	float fModifier = GetNativeCell(2);
+	float fModifier												= GetNativeCell(2);
 
 	g_fRocketClassRocketsModifier[iClass] = fModifier;
 
@@ -3428,9 +3428,9 @@ public any Native_GetRocketClassPlayerModifier(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassPlayerModifier(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int		iClass												 = GetNativeCell(1);
 
-	float fModifier = GetNativeCell(2);
+	float fModifier											 = GetNativeCell(2);
 
 	g_fRocketClassPlayerModifier[iClass] = fModifier;
 
@@ -3446,9 +3446,9 @@ public any Native_GetRocketClassControlDelay(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassControlDelay(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int		iClass											 = GetNativeCell(1);
 
-	float fDelay = GetNativeCell(2);
+	float fDelay											 = GetNativeCell(2);
 
 	g_fRocketClassControlDelay[iClass] = fDelay;
 
@@ -3464,9 +3464,9 @@ public any Native_GetRocketClassDragTimeMin(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassDragTimeMin(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int		iClass											= GetNativeCell(1);
 
-	float fMin = GetNativeCell(2);
+	float fMin												= GetNativeCell(2);
 
 	g_fRocketClassDragTimeMin[iClass] = fMin;
 
@@ -3482,9 +3482,9 @@ public any Native_GetRocketClassDragTimeMax(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassDragTimeMax(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int		iClass											= GetNativeCell(1);
 
-	float fMax = GetNativeCell(2);
+	float fMax												= GetNativeCell(2);
 
 	g_fRocketClassDragTimeMax[iClass] = fMax;
 
@@ -3493,7 +3493,7 @@ public any Native_SetRocketClassDragTimeMax(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassCount(Handle hPlugin, int iNumParams)
 {
-	int iCount = GetNativeCell(1);
+	int iCount					= GetNativeCell(1);
 
 	g_iRocketClassCount = iCount;
 
@@ -3502,9 +3502,9 @@ public any Native_SetRocketClassCount(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketEntity(Handle hPlugin, int iNumParams)
 {
-	int iIndex = GetNativeCell(1);
+	int iIndex							= GetNativeCell(1);
 
-	int iEntity = GetNativeCell(2);
+	int iEntity							= GetNativeCell(2);
 
 	g_iRocketEntity[iIndex] = iEntity;
 
@@ -3520,9 +3520,9 @@ public any Native_GetRocketClassMaxBounces(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassMaxBounces(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int iClass											 = GetNativeCell(1);
 
-	int iBounces = GetNativeCell(2);
+	int iBounces										 = GetNativeCell(2);
 
 	g_iRocketClassMaxBounces[iClass] = iBounces;
 
@@ -3533,7 +3533,7 @@ public any Native_GetSpawnersName(Handle hPlugin, int iNumParams)
 {
 	int iSpawnerClass = GetNativeCell(1);
 
-	int iMaxLen = GetNativeCell(3);
+	int iMaxLen				= GetNativeCell(3);
 
 	SetNativeString(2, g_strSpawnersName[iSpawnerClass], iMaxLen);
 
@@ -3564,9 +3564,9 @@ public any Native_GetSpawnersMaxRockets(Handle hPlugin, int iNumParams)
 
 public any Native_SetSpawnersMaxRockets(Handle hPlugin, int iNumParams)
 {
-	int iSpawnerClass = GetNativeCell(1);
+	int iSpawnerClass										 = GetNativeCell(1);
 
-	int iMaxRockets = GetNativeCell(2);
+	int iMaxRockets											 = GetNativeCell(2);
 
 	g_iSpawnersMaxRockets[iSpawnerClass] = iMaxRockets;
 
@@ -3582,9 +3582,9 @@ public any Native_GetSpawnersInterval(Handle hPlugin, int iNumParams)
 
 public any Native_SetSpawnersInterval(Handle hPlugin, int iNumParams)
 {
-	int iSpawnerClass = GetNativeCell(1);
+	int		iSpawnerClass								 = GetNativeCell(1);
 
-	float fInterval = GetNativeCell(2);
+	float fInterval										 = GetNativeCell(2);
 
 	g_fSpawnersInterval[iSpawnerClass] = fInterval;
 
@@ -3593,20 +3593,20 @@ public any Native_SetSpawnersInterval(Handle hPlugin, int iNumParams)
 
 public any Native_GetSpawnersChancesTable(Handle hPlugin, int iNumParams)
 {
-	int iSpawnerClass = GetNativeCell(1);
+	int		 iSpawnerClass = GetNativeCell(1);
 
-	Handle hClone = CloneHandle(g_hSpawnersChancesTable[iSpawnerClass], hPlugin);
+	Handle hClone				 = CloneHandle(g_hSpawnersChancesTable[iSpawnerClass], hPlugin);
 
 	return hClone;
 }
 
 public any Native_SetSpawnersChancesTable(Handle hPlugin, int iNumParams)
 {
-	int iSpawnerClass = GetNativeCell(1);
+	int				iSpawnerClass = GetNativeCell(1);
 
-	ArrayList hTable = GetNativeCell(2);
+	ArrayList hTable				= GetNativeCell(2);
 
-	hTable = view_as<ArrayList>(CloneHandle(hTable));
+	hTable									= view_as<ArrayList>(CloneHandle(hTable));
 
 	delete g_hSpawnersChancesTable[iSpawnerClass];
 
@@ -3622,7 +3622,7 @@ public any Native_GetSpawnersCount(Handle hPlugin, int iNumParams)
 
 public any Native_SetSpawnersCount(Handle hPlugin, int iNumParams)
 {
-	int iCount = GetNativeCell(1);
+	int iCount			 = GetNativeCell(1);
 
 	g_iSpawnersCount = iCount;
 
@@ -3636,7 +3636,7 @@ public any Native_GetCurrentRedSpawn(Handle hPlugin, int iNumParams)
 
 public any Native_SetCurrentRedSpawn(Handle hPlugin, int iNumParams)
 {
-	int iRedSpawn = GetNativeCell(1);
+	int iRedSpawn			 = GetNativeCell(1);
 
 	g_iCurrentRedSpawn = iRedSpawn;
 
@@ -3650,7 +3650,7 @@ public any Native_GetSpawnPointsRedCount(Handle hPlugin, int iNumParams)
 
 public any Native_SetSpawnPointsRedCount(Handle hPlugin, int iNumParams)
 {
-	int iCount = GetNativeCell(1);
+	int iCount						 = GetNativeCell(1);
 
 	g_iSpawnPointsRedCount = iCount;
 
@@ -3666,9 +3666,9 @@ public any Native_GetSpawnPointsRedClass(Handle hPlugin, int iNumParams)
 
 public any Native_SetSpawnPointsRedClass(Handle hPlugin, int iNumParams)
 {
-	int iSpawner = GetNativeCell(1);
+	int iSpawner										 = GetNativeCell(1);
 
-	int iSpawnerClass = GetNativeCell(2);
+	int iSpawnerClass								 = GetNativeCell(2);
 
 	g_iSpawnPointsRedClass[iSpawner] = iSpawnerClass;
 
@@ -3684,9 +3684,9 @@ public any Native_GetSpawnPointsRedEntity(Handle hPlugin, int iNumParams)
 
 public any Native_SetSpawnPointsRedEntity(Handle hPlugin, int iNumParams)
 {
-	int iSpawner = GetNativeCell(1);
+	int iSpawner											= GetNativeCell(1);
 
-	int iEntity = GetNativeCell(2);
+	int iEntity												= GetNativeCell(2);
 
 	g_iSpawnPointsRedEntity[iSpawner] = iEntity;
 
@@ -3700,7 +3700,7 @@ public any Native_GetCurrentBluSpawn(Handle hPlugin, int iNumParams)
 
 public any Native_SetCurrentBluSpawn(Handle hPlugin, int iNumParams)
 {
-	int iBluSpawn = GetNativeCell(1);
+	int iBluSpawn			 = GetNativeCell(1);
 
 	g_iCurrentBluSpawn = iBluSpawn;
 
@@ -3714,7 +3714,7 @@ public any Native_GetSpawnPointsBluCount(Handle hPlugin, int iNumParams)
 
 public any Native_SetSpawnPointsBluCount(Handle hPlugin, int iNumParams)
 {
-	int iCount = GetNativeCell(1);
+	int iCount						 = GetNativeCell(1);
 
 	g_iSpawnPointsBluCount = iCount;
 
@@ -3730,9 +3730,9 @@ public any Native_GetSpawnPointsBluClass(Handle hPlugin, int iNumParams)
 
 public any Native_SetSpawnPointsBluClass(Handle hPlugin, int iNumParams)
 {
-	int iSpawner = GetNativeCell(1);
+	int iSpawner										 = GetNativeCell(1);
 
-	int iSpawnerClass = GetNativeCell(2);
+	int iSpawnerClass								 = GetNativeCell(2);
 
 	g_iSpawnPointsBluClass[iSpawner] = iSpawnerClass;
 
@@ -3748,9 +3748,9 @@ public any Native_GetSpawnPointsBluEntity(Handle hPlugin, int iNumParams)
 
 public any Native_SetSpawnPointsBluEntity(Handle hPlugin, int iNumParams)
 {
-	int iSpawner = GetNativeCell(1);
+	int iSpawner											= GetNativeCell(1);
 
-	int iEntity = GetNativeCell(2);
+	int iEntity												= GetNativeCell(2);
 
 	g_iSpawnPointsBluEntity[iSpawner] = iEntity;
 
@@ -3810,9 +3810,9 @@ public any Native_GetRocketSpeed(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketSpeed(Handle hPlugin, int iNumParams)
 {
-	int iIndex = GetNativeCell(1);
+	int		iIndex					 = GetNativeCell(1);
 
-	float fSpeed = GetNativeCell(2);
+	float fSpeed					 = GetNativeCell(2);
 
 	g_fRocketSpeed[iIndex] = fSpeed;
 
@@ -3828,9 +3828,9 @@ public any Native_GetRocketMphSpeed(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketMphSpeed(Handle hPlugin, int iNumParams)
 {
-	int iIndex = GetNativeCell(1);
+	int		iIndex							= GetNativeCell(1);
 
-	float fSpeed = GetNativeCell(2);
+	float fSpeed							= GetNativeCell(2);
 
 	g_fRocketMphSpeed[iIndex] = fSpeed;
 
@@ -3848,7 +3848,7 @@ public any Native_GetRocketDirection(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketDirection(Handle hPlugin, int iNumParams)
 {
-	int iIndex = GetNativeCell(1);
+	int		iIndex = GetNativeCell(1);
 
 	float fDirection[3];
 	GetNativeArray(2, fDirection, sizeof(fDirection));
@@ -3867,9 +3867,9 @@ public any Native_GetRocketLastDeflectionTime(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketLastDeflectionTime(Handle hPlugin, int iNumParams)
 {
-	int iIndex = GetNativeCell(1);
+	int		iIndex												= GetNativeCell(1);
 
-	float fTime = GetNativeCell(2);
+	float fTime													= GetNativeCell(2);
 
 	g_fRocketLastDeflectionTime[iIndex] = fTime;
 
@@ -3885,9 +3885,9 @@ public any Native_GetRocketLastBeepTime(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketLastBeepTime(Handle hPlugin, int iNumParams)
 {
-	int iIndex = GetNativeCell(1);
+	int		iIndex									= GetNativeCell(1);
 
-	float fTime = GetNativeCell(2);
+	float fTime										= GetNativeCell(2);
 
 	g_fRocketLastBeepTime[iIndex] = fTime;
 
@@ -3915,9 +3915,9 @@ public any Native_GetRocketBounces(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketBounces(Handle hPlugin, int iNumParams)
 {
-	int iIndex = GetNativeCell(1);
+	int iIndex							 = GetNativeCell(1);
 
-	int iBounces = GetNativeCell(2);
+	int iBounces						 = GetNativeCell(2);
 
 	g_iRocketBounces[iIndex] = iBounces;
 
@@ -3926,7 +3926,7 @@ public any Native_SetRocketBounces(Handle hPlugin, int iNumParams)
 
 public any Native_GetRocketClassName(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int iClass	= GetNativeCell(1);
 
 	int iMaxLen = GetNativeCell(3);
 
@@ -3952,7 +3952,7 @@ public any Native_SetRocketClassName(Handle hPlugin, int iNumParams)
 
 public any Native_GetRocketClassLongName(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int iClass	= GetNativeCell(1);
 
 	int iMaxLen = GetNativeCell(3);
 
@@ -3978,7 +3978,7 @@ public any Native_SetRocketClassLongName(Handle hPlugin, int iNumParams)
 
 public any Native_GetRocketClassModel(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int iClass	= GetNativeCell(1);
 
 	int iMaxLen = GetNativeCell(3);
 
@@ -4011,9 +4011,9 @@ public any Native_GetRocketClassBeepInterval(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassBeepInterval(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int		iClass											 = GetNativeCell(1);
 
-	float fInterval = GetNativeCell(2);
+	float fInterval										 = GetNativeCell(2);
 
 	g_fRocketClassBeepInterval[iClass] = fInterval;
 
@@ -4022,7 +4022,7 @@ public any Native_SetRocketClassBeepInterval(Handle hPlugin, int iNumParams)
 
 public any Native_GetRocketClassSpawnSound(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int iClass	= GetNativeCell(1);
 
 	int iMaxLen = GetNativeCell(3);
 
@@ -4048,7 +4048,7 @@ public any Native_SetRocketClassSpawnSound(Handle hPlugin, int iNumParams)
 
 public any Native_GetRocketClassBeepSound(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int iClass	= GetNativeCell(1);
 
 	int iMaxLen = GetNativeCell(3);
 
@@ -4074,7 +4074,7 @@ public any Native_SetRocketClassBeepSound(Handle hPlugin, int iNumParams)
 
 public any Native_GetRocketClassAlertSound(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int iClass	= GetNativeCell(1);
 
 	int iMaxLen = GetNativeCell(3);
 
@@ -4107,9 +4107,9 @@ public any Native_GetRocketClassCritChance(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassCritChance(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int		iClass										 = GetNativeCell(1);
 
-	float fChance = GetNativeCell(2);
+	float fChance										 = GetNativeCell(2);
 
 	g_fRocketClassCritChance[iClass] = fChance;
 
@@ -4125,9 +4125,9 @@ public any Native_GetRocketClassTargetWeight(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassTargetWeight(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int		iClass											 = GetNativeCell(1);
 
-	float fWeight = GetNativeCell(2);
+	float fWeight											 = GetNativeCell(2);
 
 	g_fRocketClassTargetWeight[iClass] = fWeight;
 
@@ -4136,7 +4136,7 @@ public any Native_SetRocketClassTargetWeight(Handle hPlugin, int iNumParams)
 
 public any Native_GetRocketClassCmdsOnSpawn(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int		 iClass = GetNativeCell(1);
 
 	Handle hClone = CloneHandle(g_hRocketClassCmdsOnSpawn[iClass], hPlugin);
 
@@ -4145,11 +4145,11 @@ public any Native_GetRocketClassCmdsOnSpawn(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassCmdsOnSpawn(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int			 iClass = GetNativeCell(1);
 
-	DataPack hCmds = GetNativeCell(2);
+	DataPack hCmds	= GetNativeCell(2);
 
-	hCmds = view_as<DataPack>(CloneHandle(hCmds));
+	hCmds						= view_as<DataPack>(CloneHandle(hCmds));
 
 	delete g_hRocketClassCmdsOnSpawn[iClass];
 
@@ -4160,7 +4160,7 @@ public any Native_SetRocketClassCmdsOnSpawn(Handle hPlugin, int iNumParams)
 
 public any Native_GetRocketClassCmdsOnDeflect(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int		 iClass = GetNativeCell(1);
 
 	Handle hClone = CloneHandle(g_hRocketClassCmdsOnDeflect[iClass], hPlugin);
 
@@ -4169,11 +4169,11 @@ public any Native_GetRocketClassCmdsOnDeflect(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassCmdsOnDeflect(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int			 iClass = GetNativeCell(1);
 
-	DataPack hCmds = GetNativeCell(2);
+	DataPack hCmds	= GetNativeCell(2);
 
-	hCmds = view_as<DataPack>(CloneHandle(hCmds));
+	hCmds						= view_as<DataPack>(CloneHandle(hCmds));
 
 	delete g_hRocketClassCmdsOnDeflect[iClass];
 
@@ -4184,7 +4184,7 @@ public any Native_SetRocketClassCmdsOnDeflect(Handle hPlugin, int iNumParams)
 
 public any Native_GetRocketClassCmdsOnKill(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int		 iClass = GetNativeCell(1);
 
 	Handle hClone = CloneHandle(g_hRocketClassCmdsOnKill[iClass], hPlugin);
 
@@ -4193,11 +4193,11 @@ public any Native_GetRocketClassCmdsOnKill(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassCmdsOnKill(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int			 iClass = GetNativeCell(1);
 
-	DataPack hCmds = GetNativeCell(2);
+	DataPack hCmds	= GetNativeCell(2);
 
-	hCmds = view_as<DataPack>(CloneHandle(hCmds));
+	hCmds						= view_as<DataPack>(CloneHandle(hCmds));
 
 	delete g_hRocketClassCmdsOnKill[iClass];
 
@@ -4208,7 +4208,7 @@ public any Native_SetRocketClassCmdsOnKill(Handle hPlugin, int iNumParams)
 
 public any Native_GetRocketClassCmdsOnExplode(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int		 iClass = GetNativeCell(1);
 
 	Handle hClone = CloneHandle(g_hRocketClassCmdsOnExplode[iClass], hPlugin);
 
@@ -4217,11 +4217,11 @@ public any Native_GetRocketClassCmdsOnExplode(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassCmdsOnExplode(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int			 iClass = GetNativeCell(1);
 
-	DataPack hCmds = GetNativeCell(2);
+	DataPack hCmds	= GetNativeCell(2);
 
-	hCmds = view_as<DataPack>(CloneHandle(hCmds));
+	hCmds						= view_as<DataPack>(CloneHandle(hCmds));
 
 	delete g_hRocketClassCmdsOnExplode[iClass];
 
@@ -4232,7 +4232,7 @@ public any Native_SetRocketClassCmdsOnExplode(Handle hPlugin, int iNumParams)
 
 public any Native_GetRocketClassCmdsOnNoTarget(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int		 iClass = GetNativeCell(1);
 
 	Handle hClone = CloneHandle(g_hRocketClassCmdsOnNoTarget[iClass], hPlugin);
 
@@ -4241,11 +4241,11 @@ public any Native_GetRocketClassCmdsOnNoTarget(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassCmdsOnNoTarget(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int			 iClass = GetNativeCell(1);
 
-	DataPack hCmds = GetNativeCell(2);
+	DataPack hCmds	= GetNativeCell(2);
 
-	hCmds = view_as<DataPack>(CloneHandle(hCmds));
+	hCmds						= view_as<DataPack>(CloneHandle(hCmds));
 
 	delete g_hRocketClassCmdsOnNoTarget[iClass];
 
@@ -4263,9 +4263,9 @@ public any Native_GetRocketClassBounceScale(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketClassBounceScale(Handle hPlugin, int iNumParams)
 {
-	int iClass = GetNativeCell(1);
+	int		iClass											= GetNativeCell(1);
 
-	float fScale = GetNativeCell(2);
+	float fScale											= GetNativeCell(2);
 
 	g_fRocketClassBounceScale[iClass] = fScale;
 
@@ -4275,9 +4275,9 @@ public any Native_SetRocketClassBounceScale(Handle hPlugin, int iNumParams)
 public any Native_CreateRocket(Handle hPlugin, int iNumParams)
 {
 	int iSpawnerEntity = GetNativeCell(1);
-	int iSpawnerClass  = GetNativeCell(2);
-	int iTeam          = GetNativeCell(3);
-	int iClass         = GetNativeCell(4);
+	int iSpawnerClass	 = GetNativeCell(2);
+	int iTeam					 = GetNativeCell(3);
+	int iClass				 = GetNativeCell(4);
 
 	CreateRocket(iSpawnerEntity, iSpawnerClass, iTeam, iClass);
 
@@ -4370,7 +4370,7 @@ public any Native_GetRocketState(Handle hPlugin, int iNumParams)
 
 public any Native_SetRocketState(Handle hPlugin, int iNumParams)
 {
-	int iIndex = GetNativeCell(1);
+	int					iIndex = GetNativeCell(1);
 
 	RocketState iState = GetNativeCell(2);
 
@@ -4381,9 +4381,9 @@ public any Native_SetRocketState(Handle hPlugin, int iNumParams)
 
 public any Native_GetStealInfo(Handle hPlugin, int iNumParams)
 {
-	int iClient = GetNativeCell(1);
+	int			 iClient = GetNativeCell(1);
 
-	DataPack hPack = new DataPack();
+	DataPack hPack	 = new DataPack();
 	hPack.WriteCellArray(bStealArray[iClient], sizeof(eRocketSteal));
 
 	DataPack hClone = view_as<DataPack>(CloneHandle(hPack, hPlugin));
@@ -4395,11 +4395,11 @@ public any Native_GetStealInfo(Handle hPlugin, int iNumParams)
 
 public any Native_SetStealInfo(Handle hPlugin, int iNumParams)
 {
-	int iClient = GetNativeCell(1);
+	int			 iClient = GetNativeCell(1);
 
-	DataPack hPack = GetNativeCell(2);
+	DataPack hPack	 = GetNativeCell(2);
 
-	hPack = view_as<DataPack>(CloneHandle(hPack));
+	hPack						 = view_as<DataPack>(CloneHandle(hPack));
 
 	eRocketSteal eStealArray;
 
