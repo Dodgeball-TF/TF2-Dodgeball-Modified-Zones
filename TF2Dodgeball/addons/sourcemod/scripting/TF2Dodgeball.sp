@@ -552,7 +552,6 @@ void EnableDodgeBall()
 
 	// Hook events and info_target outputs.
 	HookEvent("teamplay_round_start", OnRoundStart, EventHookMode_PostNoCopy);
-	HookEvent("teamplay_round_start", OnSetupFinished, EventHookMode_PostNoCopy);
 	// teamplay_setup_finished will not fire on maps that lack team_round_timer
 	HookEvent("arena_round_start", OnSetupFinished, EventHookMode_PostNoCopy);
 	HookEvent("teamplay_round_win", OnRoundEnd, EventHookMode_PostNoCopy);
@@ -633,8 +632,8 @@ void DisableDodgeBall()
 
 	// Unhook events and info_target outputs
 	UnhookEvent("teamplay_round_start", OnRoundStart, EventHookMode_PostNoCopy);
+	// teamplay_setup_finished will not fire on maps that lack team_round_timer
 	UnhookEvent("arena_round_start", OnSetupFinished, EventHookMode_PostNoCopy);
-	UnhookEvent("round_start", OnSetupFinished, EventHookMode_PostNoCopy);
 	UnhookEvent("teamplay_round_win", OnRoundEnd, EventHookMode_PostNoCopy);
 	UnhookEvent("player_spawn", OnPlayerSpawn, EventHookMode_Post);
 	UnhookEvent("player_death", OnPlayerDeath, EventHookMode_Pre);
@@ -694,6 +693,8 @@ public void OnRoundStart(Event hEvent, char[] strEventName, bool bDontBroadcast)
 		bStealArray[iClient].stoleRocket	 = false;
 		bStealArray[iClient].rocketsStolen = 0;
 	}
+	Event hArenaRoundStart = CreateEvent("arena_round_start", true);
+	hArenaRoundStart.Fire();
 }
 
 /* OnSetupFinished()
@@ -704,7 +705,7 @@ public void OnRoundStart(Event hEvent, char[] strEventName, bool bDontBroadcast)
 public void OnSetupFinished(Event hEvent, char[] strEventName, bool bDontBroadcast)
 {
 	LogMessage("OnSetupFinished");
-	if (!BothTeamsPlaying()) return;
+	// if (!BothTeamsPlaying()) return;
 
 	PopulateSpawnPoints();
 
@@ -979,41 +980,76 @@ public int AmountOfPlayersInsideZone()
 	return iAmount;
 }
 
+public int AmountOfPlayersTeamInsideZone(int team)
+{
+	int iAmount = 0;
+	for (int iClient = 1; iClient <= MaxClients; iClient++)
+	{
+		if (!IsValidClient(iClient)) continue;
+		int iTeam = GetClientTeam(iClient);
+		if (fuckZones_IsClientInZone(iClient, ZONE_NAME) && iTeam == team) iAmount++;
+	}
+
+	return iAmount;
+}
+
 /* OnDodgeBallGameFrame()
 **
 ** Every tick of the Dodgeball logic.
 ** -------------------------------------------------------------------------- */
 public Action OnDodgeBallGameFrame(Handle hTimer, any Data)
 {
+	int iAmount = AmountOfPlayersInsideZone();
 	// Only if both teams are playing
-	if (!BothTeamsPlaying()) return Plugin_Continue;
-	if (AmountOfPlayersInsideZone() < 2) return Plugin_Continue;
+	// if (!BothTeamsPlaying()) return Plugin_Continue;
+	if (iAmount < 2) return Plugin_Continue;
 
 	// Check if we need to fire more rockets.
 	if (GetGameTime() >= g_fNextSpawnTime)
 	{
-		if (g_iLastDeadTeam == view_as<int>(TFTeam_Red))
+		// Check any players on same team is inside the zone.
+		if (AmountOfPlayersTeamInsideZone(view_as<int>(TFTeam_Blue)) >= 2)
 		{
-			// ! Issues: Because "OnSetupFinished" doesn't work properly, I think. Which results these to be -1. And halting the whole gamemode.
-			// ! maybe need to call these globally first before the dodgeball timer, and ensure they are not -1.
+			int iSpawnerEntity = g_iSpawnPointsBluEntity[g_iCurrentBluSpawn];
+			int iSpawnerClass	 = g_iSpawnPointsBluClass[g_iCurrentBluSpawn];
+			if (g_iRocketCount < g_iSpawnersMaxRockets[iSpawnerClass])
+			{
+				CreateRocket(iSpawnerEntity, iSpawnerClass, view_as<int>(TFTeam_Blue));
+				g_iCurrentBluSpawn = (g_iCurrentBluSpawn + 1) % g_iSpawnPointsBluCount;
+			}
+		}
+		else if (AmountOfPlayersTeamInsideZone(view_as<int>(TFTeam_Red)) >= 2)
+		{
 			int iSpawnerEntity = g_iSpawnPointsRedEntity[g_iCurrentRedSpawn];
 			int iSpawnerClass	 = g_iSpawnPointsRedClass[g_iCurrentRedSpawn];
-
 			if (g_iRocketCount < g_iSpawnersMaxRockets[iSpawnerClass])
 			{
 				CreateRocket(iSpawnerEntity, iSpawnerClass, view_as<int>(TFTeam_Red));
 				g_iCurrentRedSpawn = (g_iCurrentRedSpawn + 1) % g_iSpawnPointsRedCount;
 			}
 		}
-		else
-		{
-			int iSpawnerEntity = g_iSpawnPointsBluEntity[g_iCurrentBluSpawn];
-			int iSpawnerClass	 = g_iSpawnPointsBluClass[g_iCurrentBluSpawn];
-
-			if (g_iRocketCount < g_iSpawnersMaxRockets[iSpawnerClass])
+		else {
+			if (g_iLastDeadTeam == view_as<int>(TFTeam_Red))
 			{
-				CreateRocket(iSpawnerEntity, iSpawnerClass, view_as<int>(TFTeam_Blue));
-				g_iCurrentBluSpawn = (g_iCurrentBluSpawn + 1) % g_iSpawnPointsBluCount;
+				// ! Issues: Because "OnSetupFinished" doesn't work properly, I think. Which results these to be -1. And halting the whole gamemode.
+				// ! maybe need to call these globally first before the dodgeball timer, and ensure they are not -1.
+				int iSpawnerEntity = g_iSpawnPointsRedEntity[g_iCurrentRedSpawn];
+				int iSpawnerClass	 = g_iSpawnPointsRedClass[g_iCurrentRedSpawn];
+				if (g_iRocketCount < g_iSpawnersMaxRockets[iSpawnerClass])
+				{
+					CreateRocket(iSpawnerEntity, iSpawnerClass, view_as<int>(TFTeam_Red));
+					g_iCurrentRedSpawn = (g_iCurrentRedSpawn + 1) % g_iSpawnPointsRedCount;
+				}
+			}
+			else
+			{
+				int iSpawnerEntity = g_iSpawnPointsBluEntity[g_iCurrentBluSpawn];
+				int iSpawnerClass	 = g_iSpawnPointsBluClass[g_iCurrentBluSpawn];
+				if (g_iRocketCount < g_iSpawnersMaxRockets[iSpawnerClass])
+				{
+					CreateRocket(iSpawnerEntity, iSpawnerClass, view_as<int>(TFTeam_Blue));
+					g_iCurrentBluSpawn = (g_iCurrentBluSpawn + 1) % g_iSpawnPointsBluCount;
+				}
 			}
 		}
 	}
@@ -1100,7 +1136,7 @@ void CreateRocket(int iSpawnerEntity, int iSpawnerClass, int iTeam, int iClass =
 
 	// In order for the object_deflected event to fire, the old (previous) owner must be a valid client
 	// I'm doing this as I don't want the first object_deflected event to be skipped
-	int iRocketOwner = SelectTarget(GetAnalogueTeam(GetClientTeam(iTarget)));
+	int iRocketOwner = SelectTarget(GetClientTeam(iTarget));
 	SetEntPropEnt(iEntity, Prop_Send, "m_hOwnerEntity", iRocketOwner);
 
 	int iWeapon = GetPlayerWeaponSlot(iRocketOwner, TFWeaponSlot_Primary);
@@ -1820,6 +1856,7 @@ void DestroySpawners()
 ** -------------------------------------------------------------------------- */
 void PopulateSpawnPoints()
 {
+	LogMessage("Populating spawn points...");
 	// Clear the current settings
 	g_iSpawnPointsRedCount = 0;
 	g_iSpawnPointsBluCount = 0;
@@ -1834,6 +1871,7 @@ void PopulateSpawnPoints()
 
 		if ((StrContains(strName, "rocket_spawn_red") != -1) || (StrContains(strName, "tf_dodgeball_red") != -1))
 		{
+			LogMessage("Found red spawn point: %s", strName);
 			// Find most appropiate spawner class for this entity.
 			int iIndex = FindSpawnerByName(strName);
 			if (!IsValidRocket(iIndex)) iIndex = g_iDefaultRedSpawner;
@@ -1846,6 +1884,7 @@ void PopulateSpawnPoints()
 
 		if ((StrContains(strName, "rocket_spawn_blu") != -1) || (StrContains(strName, "tf_dodgeball_blu") != -1))
 		{
+			LogMessage("Found blu spawn point: %s", strName);
 			// Find most appropiate spawner class for this entity.
 			int iIndex = FindSpawnerByName(strName);
 			if (!IsValidRocket(iIndex)) iIndex = g_iDefaultBluSpawner;
@@ -2518,11 +2557,7 @@ stock int SelectTarget(int iTeam, int iRocket = -1)
 		if (!IsValidClientEx(iClient, true)) continue;
 		if (iTeam && GetClientTeam(iClient) != iTeam) continue;
 		if (iClient == iOwner) continue;
-		if (!isInsideZone(iClient))
-		{
-			LogMessage("Client %N is not inside zone", iClient);
-			continue;
-		}
+		if (!isInsideZone(iClient)) continue;
 
 		// Determine if this client should be the target.
 		float fNewWeight = GetURandomFloatRange(0.0, 100.0);
